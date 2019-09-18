@@ -2,6 +2,8 @@ require "bundler/setup"
 require "client-api"
 require "rspec"
 require "rspec/expectations"
+require "net/http"
+require "byebug"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -16,6 +18,6 @@ RSpec.configure do |config|
 end
 
 ClientAPI.configure do |config|
-  config.base_url = 'http://www.google.com'
+  config.base_url = 'https://reqres.in'
   config.headers = { 'x-auth-token' => 'my_token' }
 end

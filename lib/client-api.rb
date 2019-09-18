@@ -1,12 +1,6 @@
 require "client-api/version"
 require "client-api/base"
-
-# module Client
-#   module Api
-#     class Error < StandardError; end
-#     # Your code goes here...
-#   end
-# end
+require "client-api/client_request"
 
 RSpec.configure do |config|
   config.add_setting :base_url
