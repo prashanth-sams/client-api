@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "client/api"
+require "client-api"
 require "rspec"
 require "rspec/expectations"
 
@@ -13,4 +13,9 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+ClientAPI.configure do |config|
+  config.base_url = 'http://www.google.com'
+  config.headers = { 'x-auth-token' => 'my_token' }
 end

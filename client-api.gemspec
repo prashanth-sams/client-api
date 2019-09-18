@@ -1,10 +1,10 @@
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "client/api/version"
+require "client-api/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "client-api"
-  spec.version       = Client::Api::VERSION
+  spec.version       = ClientAPI::VERSION
   spec.authors       = ["prashanth-sams", "heerasinghmca"]
   spec.email         = ["sams.prashanth@gmail.com", "heerasingh.mca07@gmail.com"]
 
