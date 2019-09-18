@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = "client-api"
   spec.version       = Client::Api::VERSION
   spec.authors       = ["prashanth-sams", "heerasinghmca"]
-  spec.email         = ["sams.prashanth@gmail.com"]
+  spec.email         = ["sams.prashanth@gmail.com", "heerasingh.mca07@gmail.com"]
 
   spec.summary       = %q{HTTP Rest API client}
   spec.description   = %q{TODO: Write a longer description or delete this line.}

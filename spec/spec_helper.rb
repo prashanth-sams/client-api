@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "client/api"
+require "rspec"
+require "rspec/expectations"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
