@@ -1,11 +1,4 @@
 RSpec.describe ClientApi do
-  it "has a version number" do
-    expect(ClientApi::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(true).to eq(true)
-  end
 
   it "{GET request} response validation", :get do
     ClientApi.get('/api/users')
@@ -18,6 +11,13 @@ RSpec.describe ClientApi do
     ClientApi.post('/api/users', body = {"name": "prashanth sams"})
 
     expect(ClientApi.status).to eq(201)
+    p ClientApi.body
+  end
+
+  it "{DELETE request} response validation", :delete do
+    ClientApi.delete('/api/users/3')
+
+    expect(ClientApi.status).to eq(204)
     p ClientApi.body
   end
 
