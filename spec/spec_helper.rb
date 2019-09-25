@@ -17,7 +17,7 @@ RSpec.configure do |config|
   end
 end
 
-ClientAPI.configure do |config|
+ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
-  config.headers = { 'x-auth-token' => 'my_token' }
+  config.headers = {'x-auth-token' => 'my_token'}
 end

@@ -1,20 +1,15 @@
-
-module ClientAPI
-
-  def self.configure
-    RSpec.configure do |config|
-      yield config
-    end
-  end
-
-  def self.configuration
-    RSpec.configuration
-  end
+module ClientApi
 
   def get(url, headers = nil)
-    response = client_request(:get, url, headers: headers)
-    @status = response.code.to_i
-    @body = response.body
+    @output = client_request(:get, url, headers: headers)
+  end
+
+  def status
+    @output.code.to_i
+  end
+
+  def body
+    @output.body
   end
 
 end

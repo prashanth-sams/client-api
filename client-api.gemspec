@@ -4,7 +4,7 @@ require "client-api/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "client-api"
-  spec.version       = ClientAPI::VERSION
+  spec.version       = ClientApi::VERSION
   spec.authors       = ["prashanth-sams", "heerasinghmca"]
   spec.email         = ["sams.prashanth@gmail.com", "heerasingh.mca07@gmail.com"]
 

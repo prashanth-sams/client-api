@@ -1,6 +1,6 @@
-RSpec.describe ClientAPI do
+RSpec.describe ClientApi do
   it "has a version number" do
-    expect(ClientAPI::VERSION).not_to be nil
+    expect(ClientApi::VERSION).not_to be nil
   end
 
   it "does something useful" do
@@ -8,8 +8,10 @@ RSpec.describe ClientAPI do
   end
 
   it "validate response status for get request" do
-    get '/api/users'
 
-    expect(@status).to eq(200)
+    ClientApi.get('/api/users')
+
+    expect(ClientApi.status).to eq(200)
+    p ClientApi.body
   end
 end
