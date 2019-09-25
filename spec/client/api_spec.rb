@@ -14,7 +14,7 @@ RSpec.describe ClientApi do
     p ClientApi.body
   end
 
-  it "{DELETE request} response validation", :post do
+  it "{DELETE request} response validation", :delete do
     ClientApi.delete('/api/users/3')
 
     expect(ClientApi.status).to eq(204)
