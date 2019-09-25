@@ -1,4 +1,4 @@
-# Client::Api
+# ClientApi
 
 [![Gem Version](https://badge.fury.io/rb/client-api.svg)](http://badge.fury.io/rb/client-api)
 > HTTP Rest API Client
@@ -26,7 +26,17 @@ require 'client-api'
 
 ## Usage
 
-TBD
+```bash
+it "{GET request} response validation", :get do
+    ClientApi.get('/api/users')
+    expect(ClientApi.status).to eq(200)
+end
+
+it "{POST request} response validation", :post do
+    ClientApi.post('/api/users', body = {"name": "prashanth sams"})
+    expect(ClientApi.status).to eq(201)
+end
+```
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api

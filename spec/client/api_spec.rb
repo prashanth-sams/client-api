@@ -7,11 +7,18 @@ RSpec.describe ClientApi do
     expect(true).to eq(true)
   end
 
-  it "validate response status for get request" do
-
+  it "{GET request} response validation", :get do
     ClientApi.get('/api/users')
 
     expect(ClientApi.status).to eq(200)
     p ClientApi.body
   end
+
+  it "{POST request} response validation", :post do
+    ClientApi.post('/api/users', body = {"name": "prashanth sams"})
+
+    expect(ClientApi.status).to eq(201)
+    p ClientApi.body
+  end
+
 end
