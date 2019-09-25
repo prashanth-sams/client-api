@@ -13,4 +13,8 @@ module ClientApi
   def self.base_url
     ClientApi.configuration.base_url || ''
   end
+
+  def self.headers
+    ClientApi.configuration.headers || ''
+  end
 end

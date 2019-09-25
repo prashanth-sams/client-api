@@ -1,7 +1,11 @@
 module ClientApi
 
   def get(url, headers = nil)
-    @output = client_request(:get, url, headers: headers)
+    @output = get_request(url, headers: headers)
+  end
+
+  def post(url, body, headers = nil)
+    @output = post_request(url, body: body, headers: headers)
   end
 
   def status
@@ -9,7 +13,7 @@ module ClientApi
   end
 
   def body
-    @output.body
+    JSON.parse(@output.body)
   end
 
 end

@@ -3,6 +3,7 @@ require "client-api"
 require "rspec"
 require "rspec/expectations"
 require "net/http"
+require "json"
 require "byebug"
 
 RSpec.configure do |config|
@@ -19,5 +20,5 @@ end
 
 ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
-  config.headers = {'x-auth-token' => 'my_token'}
+  config.headers = {'Content-Type' => 'application/json'}
 end
