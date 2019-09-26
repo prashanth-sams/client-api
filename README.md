@@ -62,6 +62,14 @@ it "{PATCH request} response validation", :patch do
 end
 ```
 
+Using `json` template as body
+```ruby
+it "{POST request} template as body", :post do
+    ClientApi.post('/api/users', body = JSON.load(File.open("./data/template/post.json")))
+    expect(ClientApi.status).to eq(201)
+end
+```
+
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
 ```
