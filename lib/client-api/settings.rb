@@ -17,4 +17,10 @@ module ClientApi
   def self.headers
     ClientApi.configuration.headers || ''
   end
+
+  def output=(args)
+    $output_json_dir = args['dirname']
+    $output_json_filename = args['filename']
+  end
+
 end

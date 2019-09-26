@@ -65,10 +65,18 @@ end
 Using `json` template as body
 ```ruby
 it "{POST request} template as body", :post do
-    ClientApi.post('/api/users', body = JSON.load(File.open("./data/template/post.json")))
+    ClientApi.post('/api/users', body = json_body("./data/template/post.json"))
     expect(ClientApi.status).to eq(201)
 end
 ```
+
+JSON output
+
+```ruby
+config.output = {'dirname' => './output', 'filename' => 'sample'}
+```
+
+<img src="https://i.imgur.com/j21B9gC.png" height="110" width="250"> 
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
