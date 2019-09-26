@@ -35,7 +35,7 @@ end
 ```
 
 RSpec test scenarios look like,
-```bash
+```ruby
 it "{GET request} response validation", :get do
     ClientApi.get('/api/users')
     expect(ClientApi.status).to eq(200)
