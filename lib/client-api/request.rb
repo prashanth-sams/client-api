@@ -19,7 +19,14 @@ module ClientApi
     http.delete(uri(url).path)
   end
 
-  def uri(url)
-    URI.parse(base_url + url)
+  def put_request(url, options={})
+    body = options[:body] || {}
+    http = Net::HTTP.new(uri(url).host, uri(url).port)
+    http.use_ssl = true
+    http.put(uri(url).path, body.to_json, initheader = headers)
+  end
+
+  def uri(args)
+    URI.parse(base_url + args)
   end
 end

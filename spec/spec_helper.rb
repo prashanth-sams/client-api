@@ -20,5 +20,5 @@ end
 
 ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
-  config.headers = {'Content-Type' => 'application/json'}
+  config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 end
