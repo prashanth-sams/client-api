@@ -4,6 +4,8 @@ RSpec.describe ClientApi do
     ClientApi.get('/api/users')
 
     expect(ClientApi.status).to eq(200)
+    expect(ClientApi.code).to eq(200)
+    expect(ClientApi.message).to eq('OK')
     p ClientApi.body
   end
 

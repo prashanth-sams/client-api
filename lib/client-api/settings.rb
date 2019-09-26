@@ -19,8 +19,8 @@ module ClientApi
   end
 
   def output=(args)
-    $output_json_dir = args['dirname']
-    $output_json_filename = args['filename']
+    $output_json_dir = args['Dirname']
+    $output_json_filename = args['Filename']
   end
 
 end
