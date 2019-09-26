@@ -36,8 +36,14 @@ module ClientApi
     end
   end
 
+  def message
+    @output.message
+  end
+
   def json_body(path)
     JSON.load(File.open(path))
   end
+
+  alias :code :status
 
 end
