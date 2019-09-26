@@ -12,6 +12,10 @@ module ClientApi
     @output = delete_request(url, headers: headers)
   end
 
+  def put(url, body)
+    @output = put_request(url, body: body)
+  end
+
   def status
     @output.code.to_i
   end

@@ -39,8 +39,12 @@ end
 
 it "{DELETE request} response validation", :delete do
     ClientApi.delete('/api/users/3')
-    
     expect(ClientApi.status).to eq(204)
+end
+
+it "{PUT request} response validation", :put do
+    ClientApi.put('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+    expect(ClientApi.status).to eq(200)
 end
 ```
 

@@ -21,4 +21,11 @@ RSpec.describe ClientApi do
     p ClientApi.body
   end
 
+  it "{PUT request} response validation", :put do
+    ClientApi.put('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+
+    expect(ClientApi.status).to eq(200)
+    p ClientApi.body
+  end
+
 end
