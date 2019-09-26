@@ -25,7 +25,11 @@ module ClientApi
   end
 
   def body
-    JSON.parse(@output.body) unless @output.body.nil?
+    if [200, 201, 204].include? status
+      JSON.parse(@output.body)
+    else
+      JSON.parse(@output.message)
+    end
   end
 
 end
