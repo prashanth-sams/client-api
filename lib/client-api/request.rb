@@ -26,6 +26,13 @@ module ClientApi
     http.put(uri(url).path, body.to_json, initheader = headers)
   end
 
+  def patch_request(url, options={})
+    body = options[:body] || {}
+    http = Net::HTTP.new(uri(url).host, uri(url).port)
+    http.use_ssl = true
+    http.patch(uri(url).path, body.to_json, initheader = headers)
+  end
+
   def uri(args)
     URI.parse(base_url + args)
   end

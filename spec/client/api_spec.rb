@@ -28,4 +28,11 @@ RSpec.describe ClientApi do
     p ClientApi.body
   end
 
+  it "{PATCH request} response validation", :patch do
+    ClientApi.patch('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+
+    expect(ClientApi.status).to eq(200)
+    p ClientApi.body
+  end
+
 end

@@ -16,6 +16,10 @@ module ClientApi
     @output = put_request(url, body: body)
   end
 
+  def patch(url, body)
+    @output = patch_request(url, body: body)
+  end
+
   def status
     @output.code.to_i
   end
