@@ -26,10 +26,18 @@ module ClientApi
 
   def body
     if [200, 201, 204].include? status
+      unless $output_json_dir == nil
+        FileUtils.mkdir_p "#{$output_json_dir}"
+        File.open("./output/#{$output_json_filename}.json", "wb") { |file| file.puts JSON.pretty_generate(JSON.parse(@output.body)) }
+      end
       JSON.parse(@output.body)
     else
       JSON.parse(@output.message)
     end
+  end
+
+  def json_body(path)
+    JSON.load(File.open(path))
   end
 
 end

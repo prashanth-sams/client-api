@@ -3,9 +3,8 @@ require_relative '../client-api'
 module ClientApi
 
   def get_request(url, options = {})
-    http = Net::HTTP.new(uri(url).host, uri(url).port)
-    http.use_ssl = true
-    http.get(uri(url).request_uri, initheader = headers)
+    connect(url)
+    @http.get(uri(url).request_uri, initheader = headers)
   end
 
   def post_request(url, options={})
@@ -14,26 +13,36 @@ module ClientApi
   end
 
   def delete_request(url, options={})
-    http = Net::HTTP.new(uri(url).host, uri(url).port)
-    http.use_ssl = true
-    http.delete(uri(url).path)
+    connect(url)
+    @http.delete(uri(url).path)
   end
 
   def put_request(url, options={})
     body = options[:body] || {}
-    http = Net::HTTP.new(uri(url).host, uri(url).port)
-    http.use_ssl = true
-    http.put(uri(url).path, body.to_json, initheader = headers)
+
+    connect(url)
+    @http.put(uri(url).path, body.to_json, initheader = headers)
   end
 
   def patch_request(url, options={})
     body = options[:body] || {}
-    http = Net::HTTP.new(uri(url).host, uri(url).port)
-    http.use_ssl = true
-    http.patch(uri(url).path, body.to_json, initheader = headers)
+
+    connect(url)
+    @http.patch(uri(url).path, body.to_json, initheader = headers)
   end
 
   def uri(args)
     URI.parse(base_url + args)
   end
+
+  def connect(args)
+    http = Net::HTTP.new(uri(args).host, uri(args).port)
+
+    if uri(args).scheme ==  "https"
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      @http = http
+    end
+  end
+
 end
