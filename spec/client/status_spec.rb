@@ -1,33 +1,33 @@
 RSpec.describe ClientApi do
 
-  it "{GET request} response validation", :get do
+  it "{GET request} 200 response", :get do
     ClientApi.get('/api/users')
 
     expect(ClientApi.status).to eq(200)
     p ClientApi.body
   end
 
-  it "{POST request} response validation", :post do
+  it "{POST request} 201 response", :post do
     ClientApi.post('/api/users', body = {"name": "prashanth sams"})
 
     expect(ClientApi.status).to eq(201)
     p ClientApi.body
   end
 
-  it "{DELETE request} response validation", :delete do
+  it "{DELETE request} 204 response", :delete do
     ClientApi.delete('/api/users/3')
 
     expect(ClientApi.status).to eq(204)
   end
 
-  it "{PUT request} response validation", :put do
+  it "{PUT request} 200 response", :put do
     ClientApi.put('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
 
     expect(ClientApi.status).to eq(200)
     p ClientApi.body
   end
 
-  it "{PATCH request} response validation", :patch do
+  it "{PATCH request} 200 response", :patch do
     ClientApi.patch('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
 
     expect(ClientApi.status).to eq(200)
