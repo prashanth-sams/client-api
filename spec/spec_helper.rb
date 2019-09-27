@@ -21,5 +21,6 @@ end
 ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-  config.output = {'Dirname' => './output', 'Filename' => 'test'}
+  config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
+    # config.basic_auth = {'Username' => 'admin', 'Password' => 'admin'}
 end

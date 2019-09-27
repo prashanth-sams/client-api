@@ -7,24 +7,24 @@ module ClientApi
     @http.get(uri(url).request_uri, initheader = headers)
   end
 
-  def post_request(url, options={})
+  def post_request(url, options = {})
     body = options[:body] || {}
     Net::HTTP.post_form(uri(url), body)
   end
 
-  def delete_request(url, options={})
+  def delete_request(url, options = {})
     connect(url)
     @http.delete(uri(url).path)
   end
 
-  def put_request(url, options={})
+  def put_request(url, options = {})
     body = options[:body] || {}
 
     connect(url)
     @http.put(uri(url).path, body.to_json, initheader = headers)
   end
 
-  def patch_request(url, options={})
+  def patch_request(url, options = {})
     body = options[:body] || {}
 
     connect(url)
@@ -38,7 +38,7 @@ module ClientApi
   def connect(args)
     http = Net::HTTP.new(uri(args).host, uri(args).port)
 
-    if uri(args).scheme ==  "https"
+    if uri(args).scheme == "https"
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       @http = http

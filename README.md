@@ -39,38 +39,38 @@ end
 RSpec test scenarios look like,
 ```ruby
 it "GET request", :get do
-  ClientApi.get('/api/users')
-  expect(ClientApi.status).to eq(200)
-  expect(ClientApi.code).to eq(200)
-  expect(ClientApi.message).to eq('OK')
+  get('/api/users')
+  expect(status).to eq(200)
+  expect(code).to eq(200)
+  expect(message).to eq('OK')
 end
 
 it "POST request", :post do
-  ClientApi.post('/api/users', body = {"name": "prashanth sams"})
-  expect(ClientApi.status).to eq(201)
+  post('/api/users', {"name": "prashanth sams"})
+  expect(status).to eq(201)
 end
 
 it "DELETE request", :delete do
-  ClientApi.delete('/api/users/3')
-  expect(ClientApi.status).to eq(204)
+  delete('/api/users/3')
+  expect(status).to eq(204)
 end
 
 it "PUT request", :put do
-  ClientApi.put('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
-  expect(ClientApi.status).to eq(200)
+  put('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+  expect(status).to eq(200)
 end
 
 it "PATCH request", :patch do
-  ClientApi.patch('/api/users/2', body = {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
-  expect(ClientApi.status).to eq(200)
+  patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+  expect(status).to eq(200)
 end
 ```
 
 > Using `json` template as body
 ```ruby
 it "JSON template as body", :post do
-  ClientApi.post('/api/users', body = json_body("./data/template/post.json"))
-  expect(ClientApi.status).to eq(201)
+  post('/api/users', payload("./data/request/post.json"))
+  expect(status).to eq(201)
 end
 ```
 
@@ -79,11 +79,24 @@ end
 ```ruby
 ClientApi.configure do |config|
   ...
-  config.output = {'Dirname' => './output', 'Filename' => 'sample'}
+  config.json_output = {'Dirname' => './output', 'Filename' => 'sample'}
 end
 ```
 
-<img src="https://i.imgur.com/j21B9gC.png" height="170" width="330"> 
+### validation
+> Validate .json response `values` and `datatype`
+```ruby
+validate(
+    {
+        "key": "name",
+        "value": "prashanth sams",
+        "operator": "==",
+        "type": 'string'
+    }
+)
+```
+
+<img src="https://i.imgur.com/j21B9gC.png" height="200" width="400"> 
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
