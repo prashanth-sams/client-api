@@ -1,7 +1,7 @@
 # ClientApi
 
 [![Gem Version](https://badge.fury.io/rb/client-api.svg)](http://badge.fury.io/rb/client-api)
-> HTTP Rest API Client
+> HTTP Rest API Client for RSpec
 
 ## Installation
 
@@ -83,6 +83,8 @@ ClientApi.configure do |config|
 end
 ```
 
+<img src="https://i.imgur.com/j21B9gC.png" height="200" width="400">
+
 ### validation
 > Validate .json response `values` and `datatype`
 ```ruby
@@ -94,9 +96,7 @@ validate(
         "type": 'string'
     }
 )
-```
-
-<img src="https://i.imgur.com/j21B9gC.png" height="200" width="400"> 
+``` 
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
