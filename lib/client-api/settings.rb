@@ -10,15 +10,15 @@ module ClientApi
     RSpec.configuration
   end
 
-  def self.base_url
+  def base_url
     ClientApi.configuration.base_url || ''
   end
 
-  def self.headers
+  def headers
     ClientApi.configuration.headers || ''
   end
 
-  def output=(args)
+  def json_output=(args)
     $output_json_dir = args['Dirname']
     $output_json_filename = args['Filename']
   end

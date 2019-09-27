@@ -2,6 +2,7 @@ require "client-api/version"
 require "client-api/settings"
 require "client-api/base"
 require "client-api/request"
+require "client-api/validator"
 
 RSpec.configure do |config|
   config.add_setting :base_url
