@@ -38,29 +38,29 @@ end
 
 RSpec test scenarios look like,
 ```ruby
-it "GET request", :get do
+it "GET request" do
   get('/api/users')
   expect(status).to eq(200)
   expect(code).to eq(200)
   expect(message).to eq('OK')
 end
 
-it "POST request", :post do
+it "POST request" do
   post('/api/users', {"name": "prashanth sams"})
   expect(status).to eq(201)
 end
 
-it "DELETE request", :delete do
+it "DELETE request" do
   delete('/api/users/3')
   expect(status).to eq(204)
 end
 
-it "PUT request", :put do
+it "PUT request" do
   put('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
   expect(status).to eq(200)
 end
 
-it "PATCH request", :patch do
+it "PATCH request" do
   patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
   expect(status).to eq(200)
 end
@@ -68,9 +68,22 @@ end
 
 > Using `json` template as body
 ```ruby
-it "JSON template as body", :post do
+it "JSON template as body" do
   post('/api/users', payload("./data/request/post.json"))
   expect(status).to eq(201)
+end
+```
+
+> Add custom header
+```ruby
+it "GET request with custom header" do
+  get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
+  expect(status).to eq(200)
+end
+
+it "PATCH request with custom header" do
+  patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}}, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
+  expect(status).to eq(200)
 end
 ```
 

@@ -12,12 +12,12 @@ module ClientApi
     @output = delete_request(url, :headers => headers)
   end
 
-  def put(url, body)
-    @output = put_request(url, :body => body)
+  def put(url, body, headers = nil)
+    @output = put_request(url, :body => body, :headers => headers)
   end
 
-  def patch(url, body)
-    @output = patch_request(url, :body => body)
+  def patch(url, body, headers = nil)
+    @output = patch_request(url, :body => body, :headers => headers)
   end
 
   def status

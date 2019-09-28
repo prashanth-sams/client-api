@@ -3,8 +3,11 @@ require_relative '../client-api'
 module ClientApi
 
   def get_request(url, options = {})
+    mod_headers = options[:headers] || {}
+    header = headers.merge(mod_headers)
+
     connect(url)
-    @http.get(uri(url).request_uri, initheader = headers)
+    @http.get(uri(url).request_uri, initheader = header)
   end
 
   def post_request(url, options = {})
@@ -13,22 +16,29 @@ module ClientApi
   end
 
   def delete_request(url, options = {})
+    mod_headers = options[:headers] || {}
+    header = headers.merge(mod_headers)
+
     connect(url)
-    @http.delete(uri(url).path)
+    @http.delete(uri(url).path, initheader = header)
   end
 
   def put_request(url, options = {})
     body = options[:body] || {}
+    mod_headers = options[:headers] || {}
+    header = headers.merge(mod_headers)
 
     connect(url)
-    @http.put(uri(url).path, body.to_json, initheader = headers)
+    @http.put(uri(url).path, body.to_json, initheader = header)
   end
 
   def patch_request(url, options = {})
     body = options[:body] || {}
+    mod_headers = options[:headers] || {}
+    header = headers.merge(mod_headers)
 
     connect(url)
-    @http.patch(uri(url).path, body.to_json, initheader = headers)
+    @http.patch(uri(url).path, body.to_json, initheader = header)
   end
 
   def uri(args)
