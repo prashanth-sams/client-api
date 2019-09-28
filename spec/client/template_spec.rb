@@ -6,11 +6,10 @@ RSpec.describe ClientApi do
     expect(status).to eq(201)
   end
 
-  it "schema validator", :post do
+  it "response validator", :post do
     post('/api/users', payload("./data/request/post.json"))
 
     expect(status).to eq(201)
-
     validate(
         {
             "key": "name",
@@ -20,7 +19,7 @@ RSpec.describe ClientApi do
         }
     )
 
-    validate( { "key": "id", "value": 976, "operator": "eql?", "type": 'integer' } )
+    validate( { "key": "id", "value": "976", "operator": "eql?", "type": 'integer' } )
 
   end
 
