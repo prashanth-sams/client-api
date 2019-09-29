@@ -93,6 +93,14 @@ it "full url", :post do
   expect(status).to eq(403)
 end
 ```
+> Basic Authentication 
+
+```ruby
+ClientApi.configure do |config|
+  ...
+  config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
+end
+```
 > Output as `json` template 
 
 ```ruby
