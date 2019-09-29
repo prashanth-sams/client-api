@@ -116,6 +116,28 @@ validate(
     }
 )
 ``` 
+###### Operator
+| Type  |  options |
+| ---      | ---         |
+| Equal | `=`, `==`, `eql?`, `equal`, `equal?`         |
+| Not Equal | `!`, `!=`, `!eql?`, `not equal`, `!equal?`         |
+
+###### Datatype
+| Type  |  options |
+| ---      | ---         |
+| String | `string`, `str`         |
+| Integer | `integer`, `int`         |
+| Symbol | `symbol`, `sym`         |
+| Array | `array`, `arr`         |
+| Object | `object`, `obj`         |
+| Float | `float`         |
+| Hash | `hash`         |
+| Complex | `complex`         |
+| Rational | `rational`         |
+| Fixnum | `fixnum`         |
+| Falseclass | `falseclass`         |
+| Trueclass | `trueclass`         |
+| Bignum | `bignum`         |
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
