@@ -16,6 +16,11 @@ RSpec.describe ClientApi do
             "value": "prashanth sams",
             "operator": "==",
             "type": 'string'
+        },
+        {
+            "key": "id",
+            "operator": "!=",
+            "type": 'integer'
         }
     )
 

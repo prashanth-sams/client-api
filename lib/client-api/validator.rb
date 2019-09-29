@@ -1,23 +1,25 @@
 module ClientApi
 
-  def validate(options = {})
-    raise_error('key (or) operator is not given!') if options[:key].nil? && options[:operator].nil?
-    raise_error('value (or) type is not given!') if options[:value].nil? && options[:type].nil?
+  def validate(*options)
+    options.map do |data|
+      raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
+      raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
-    key = options[:key]
-    value = options[:value] if options[:value]
-    operator = options[:operator]
-    type = options[:type] if options[:type] || options[:type] != {} || !options[:type].empty?
+      key = data[:key]
+      value = data[:value] if data[:value]
+      operator = data[:operator]
+      type = data[:type] if data[:type] || data[:type] != {} || !data[:type].empty?
 
-    case operator
-    when '=', '==', 'eql?', 'equal', 'equal?'
-      expect(body[key]).to eq(value) if value
-      expect(body[key].class).to eq(datatype(type)) if type
-    when '!', '!=', '!eql?', 'not equal', '!equal?'
-      expect(body[key]).not eq(value) if value
-      expect(body[key].class).not eq(datatype(type)) if type
-    else
-      raise_error('operator not matching')
+      case operator
+      when '=', '==', 'eql?', 'equal', 'equal?'
+        expect(body[key]).to eq(value) if value
+        expect(body[key].class).to eq(datatype(type)) if type
+      when '!', '!=', '!eql?', 'not equal', '!equal?'
+        expect(body[key]).not_to eq(value) if value
+        expect(body[key].class).not_to eq(datatype(type)) if type
+      else
+        raise_error('operator not matching')
+      end
     end
   end
 
