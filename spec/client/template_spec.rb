@@ -19,7 +19,7 @@ RSpec.describe ClientApi do
         }
     )
 
-    validate( { "key": "id", "value": "976", "operator": "eql?", "type": 'integer' } )
+    validate( { "key": "id", "operator": "eql?", "type": 'string' } )
   end
 
 end
