@@ -12,7 +12,12 @@ module ClientApi
 
   def post_request(url, options = {})
     body = options[:body] || {}
-    Net::HTTP.post_form(uri(url), body)
+    mod_headers = options[:headers] || {}
+    header = headers.merge(mod_headers)
+
+    connect(url)
+
+    @http.post(uri(url).path, body.to_json, initheader = header)
   end
 
   def delete_request(url, options = {})
@@ -42,7 +47,11 @@ module ClientApi
   end
 
   def uri(args)
-    URI.parse(base_url + args)
+    if %w[http://, https://].any? { |protocol| args.include? protocol }
+      URI.parse(args)
+    else
+      URI.parse(base_url + args)
+    end
   end
 
   def connect(args)
