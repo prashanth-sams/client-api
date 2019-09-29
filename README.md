@@ -125,6 +125,22 @@ validate(
     }
 )
 ``` 
+> Multi validator
+```ruby
+validate(
+    {
+        "key": "name",
+        "value": "prashanth sams",
+        "operator": "==",
+        "type": 'string'
+    },
+    {
+        "key": "id",
+        "operator": "!=",
+        "type": 'integer'
+    }
+)
+```
 ###### Operator
 | Type  |  options |
 | ---      | ---         |
