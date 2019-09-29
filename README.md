@@ -86,7 +86,13 @@ it "PATCH request with custom header" do
   expect(status).to eq(200)
 end
 ```
-
+> Full url support
+```ruby
+it "full url", :post do
+  post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
+  expect(status).to eq(403)
+end
+```
 > Output as `json` template 
 
 ```ruby
