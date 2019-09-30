@@ -8,17 +8,32 @@ module ClientApi
       raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
       key = data[:key]
-      value = data[:value] if data[:value]
+      value ||= data[:value]
       operator = data[:operator]
       type = data[:type] if data[:type] || data[:type] != {} || !data[:type].empty?
 
       case operator
       when '=', '==', 'eql?', 'equal', 'equal?'
-        expect(body[key]).to eq(value) if value
-        expect(body[key].class).to eq(datatype(type)) if type
+        # value validation
+        expect(body[key]).to eq(value) if value != nil
+
+        # datatype validation
+        if (type == "boolean" || type == "bool") && value.nil?
+          expect(%w[TrueClass, FalseClass].any? {|bool| body[key].class.to_s.include? bool}).to be true
+        else
+          expect(body[key].class).to eq(datatype(type, value))
+        end
+
       when '!', '!=', '!eql?', 'not equal', '!equal?'
-        expect(body[key]).not_to eq(value) if value
-        expect(body[key].class).not_to eq(datatype(type)) if type
+        # value validation
+        expect(body[key]).not_to eq(value) if value != nil
+
+        # datatype validation
+        if (type == "boolean" || type == "bool") && value.nil?
+          expect(%w[TrueClass, FalseClass].any? {|bool| body[key].class.to_s.include? bool}).not_to be true
+        else
+          expect(body[key].class).not_to eq(datatype(type, value))
+        end
       else
         raise_error('operator not matching')
       end
@@ -30,7 +45,7 @@ module ClientApi
     expect(expected_schema).to be true
   end
 
-  def datatype(type)
+  def datatype(type, value)
     if (type.downcase == 'string') || (type.downcase.== 'str')
       String
     elsif (type.downcase.== 'integer') || (type.downcase.== 'int')
@@ -41,6 +56,9 @@ module ClientApi
       Array
     elsif (type.downcase == 'object') || (type.downcase == 'obj')
       Object
+    elsif (type.downcase == 'boolean') || (type.downcase == 'bool')
+      TrueClass if value === true
+      FalseClass if value === false
     elsif type.downcase == 'float'
       Float
     elsif type.downcase == 'hash'

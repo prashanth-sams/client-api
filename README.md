@@ -153,7 +153,7 @@ validate(
 > Schema validator
 ```ruby
 validate_schema(
-  payload('./data/schema/get_user_schema.json'),
+  schema_from_json('./data/schema/get_user_schema.json'),
   {
     "data":
         {
@@ -213,7 +213,7 @@ validate_schema(
 ```
 ```ruby
 validate_schema(
-    payload('./data/schema/get_user_schema.json'),
+    schema_from_json('./data/schema/get_user_schema.json'),
     body
 )
 ```
@@ -230,6 +230,7 @@ validate_schema(
 | String | `string`, `str`         |
 | Integer | `integer`, `int`         |
 | Symbol | `symbol`, `sym`         |
+| Boolean | `boolean`, `bool`         |
 | Array | `array`, `arr`         |
 | Object | `object`, `obj`         |
 | Float | `float`         |
