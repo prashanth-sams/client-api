@@ -45,5 +45,6 @@ module ClientApi
   end
 
   alias :code :status
+  alias :schema_from_json :payload
 
 end

@@ -6,8 +6,22 @@ RSpec.describe ClientApi do
     expect(status).to eq(201)
   end
 
+  it "boolean datatype validator", :get do
+    get('https://jsonplaceholder.typicode.com/todos/1')
+
+    expect(status).to eq(200)
+    validate(
+        {
+            "key": "completed",
+            "value": false,
+            "operator": "==",
+            "type": 'boolean'
+        }
+    )
+  end
+
   it "single key-pair response validator", :post do
-    post('/api/users', payload("./data/request/post.json"))
+    post('/api/users', schema_from_json("./data/request/post.json"))
 
     expect(status).to eq(201)
     validate(
@@ -76,7 +90,7 @@ RSpec.describe ClientApi do
     )
 
     validate_schema(
-        payload('./data/schema/get_user_schema.json'),
+        schema_from_json('./data/schema/get_user_schema.json'),
         body
     )
   end
