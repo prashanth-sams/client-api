@@ -1,7 +1,7 @@
 RSpec.describe ClientApi do
 
   it "{POST request} json template as body", :post do
-    post('/api/users', schema_from_json("./data/request/post.json"))
+    post('/api/users', payload("./data/request/post.json"))
 
     expect(status).to eq(201)
   end
