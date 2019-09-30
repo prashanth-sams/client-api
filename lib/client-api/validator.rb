@@ -1,3 +1,5 @@
+require "json-schema"
+
 module ClientApi
 
   def validate(*options)
@@ -21,6 +23,11 @@ module ClientApi
         raise_error('operator not matching')
       end
     end
+  end
+
+  def validate_schema(param1, param2)
+    expected_schema = JSON::Validator.validate(param1, param2)
+    expect(expected_schema).to be true
   end
 
   def datatype(type)

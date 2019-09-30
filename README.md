@@ -4,6 +4,15 @@
 [![Build Status](https://travis-ci.org/prashanth-sams/client-api.svg?branch=master)](https://travis-ci.org/prashanth-sams/client-api)
 > HTTP Rest API Client for RSpec
 
+### Features
+- [x] Custom Header support
+- [x] Custom URL support
+- [x] Datatype and key-Pair Validation
+- [x] Single Key-Pair response validation
+- [x] Multi Key-Pair response validation
+- [x] Schema Validation
+- [x] JSON template as body and schema
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -114,7 +123,7 @@ end
 <img src="https://i.imgur.com/j21B9gC.png" height="200" width="400">
 
 ### validation
-> Validate .json response `values` and `datatype`
+> Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
 validate(
     {
@@ -125,7 +134,7 @@ validate(
     }
 )
 ``` 
-> Multi validator
+> Multi key-pair values response validator
 ```ruby
 validate(
     {
@@ -141,6 +150,74 @@ validate(
     }
 )
 ```
+> Schema validator
+```ruby
+validate_schema(
+  payload('./data/schema/get_user_schema.json'),
+  {
+    "data":
+        {
+            "id": 2,
+            "email": "janet.weaver@reqres.in",
+            "firstd_name": "Janet",
+            "last_name": "Weaver",
+            "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"
+        }
+  }
+)
+```
+```ruby
+validate_schema(
+    {
+        "required": [
+            "data"
+        ],
+        "type": "object",
+        "properties": {
+            "data": {
+                "type": "object",
+                "required": [
+                    "id", "email", "first_name", "last_name", "avatar"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "avatar": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+  {
+    "data":
+        {
+            "id": 2,
+            "email": "janet.weaver@reqres.in",
+            "first_name": "Janet",
+            "last_name": "Weaver",
+            "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"
+        }
+  }
+)
+```
+```ruby
+validate_schema(
+    payload('./data/schema/get_user_schema.json'),
+    body
+)
+```
+
 ###### Operator
 | Type  |  options |
 | ---      | ---         |
