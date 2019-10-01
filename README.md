@@ -7,12 +7,14 @@
 ### Features
 - [x] Custom Header support
 - [x] Custom URL support
+- [x] Custom Timeout
 - [x] Datatype and key-Pair Validation
 - [x] Single Key-Pair response validation
 - [x] Multi Key-Pair response validation
 - [x] Schema Validation
 - [x] JSON template as body and schema
-- [x] Logger support
+- [x] Logs support for debug
+- [x] Custom logs remover
 
 ## Installation
 
@@ -110,6 +112,14 @@ end
 ClientApi.configure do |config|
   ...
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
+end
+```
+> Custom Timeout in secs 
+
+```ruby
+ClientApi.configure do |config|
+  ...
+  config.timeout = 10
 end
 ```
 > Output as `json` template 
