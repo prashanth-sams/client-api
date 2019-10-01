@@ -245,13 +245,13 @@ validate_schema(
 ```
 
 ### logs
-> Logs are optional in this library; you can do so through config in `spec_helper.rb`
+> Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.before(:suite) do
-    config.logger = {'Dirname' => './logs', 'Filename' => 'test'}
+    config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
   end
 end
 ``` 

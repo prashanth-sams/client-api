@@ -25,7 +25,7 @@ ClientApi.configure do |config|
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
 
   config.before(:suite) do
-    config.logger = {'Dirname' => './logs', 'Filename' => 'test'}
+    config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 1}
   end
 
 end
