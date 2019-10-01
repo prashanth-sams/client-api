@@ -41,7 +41,7 @@ RSpec.describe ClientApi do
     validate({"key": "id", "operator": "eql?", "type": 'string'})
   end
 
-  it "json schema validator", :get do
+  it "json response schema validator", :get do
     get('/api/users/2')
 
     expect(status).to eq(200)

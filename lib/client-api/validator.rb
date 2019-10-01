@@ -57,8 +57,7 @@ module ClientApi
     elsif (type.downcase == 'object') || (type.downcase == 'obj')
       Object
     elsif (type.downcase == 'boolean') || (type.downcase == 'bool')
-      TrueClass if value === true
-      FalseClass if value === false
+      value === true ? TrueClass : FalseClass
     elsif type.downcase == 'float'
       Float
     elsif type.downcase == 'hash'
