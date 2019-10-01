@@ -12,6 +12,7 @@
 - [x] Multi Key-Pair response validation
 - [x] Schema Validation
 - [x] JSON template as body and schema
+- [x] Logger support
 
 ## Installation
 
@@ -217,6 +218,20 @@ validate_schema(
     body
 )
 ```
+
+### logs
+> Logs are optional in this library; you can do so through config in `spec_helper.rb`
+
+```ruby
+ClientApi.configure do |config|
+  ...
+  config.before(:suite) do
+    config.logger = {'Dirname' => './logs', 'Filename' => 'test'}
+  end
+end
+``` 
+
+<img src="https://i.imgur.com/5yf1G3N.png" height="120" width="500">
 
 ###### Operator
 | Type  |  options |

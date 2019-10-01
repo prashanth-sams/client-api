@@ -2,22 +2,27 @@ module ClientApi
 
   def get(url, headers = nil)
     @output = get_request(url, :headers => headers)
+    post_logger if $logger
   end
 
   def post(url, body, headers = nil)
     @output = post_request(url, :body => body, :headers => headers)
+    post_logger if $logger
   end
 
   def delete(url, headers = nil)
     @output = delete_request(url, :headers => headers)
+    post_logger if $logger
   end
 
   def put(url, body, headers = nil)
     @output = put_request(url, :body => body, :headers => headers)
+    post_logger if $logger
   end
 
   def patch(url, body, headers = nil)
     @output = patch_request(url, :body => body, :headers => headers)
+    post_logger if $logger
   end
 
   def status
@@ -38,6 +43,15 @@ module ClientApi
 
   def message
     @output.message
+  end
+
+  def post_logger
+    (@output.body.nil? || @output.body == "{}") ? res_body = 'empty response body' : res_body = body
+
+    $logger.debug("Response code == #{@output.code.to_i}")
+    $logger.debug("Response body == #{res_body}")
+    $logger.debug("Response headers == #{@output.headers}")
+    $logger.debug("=====================================================================================")
   end
 
   def payload(path)
