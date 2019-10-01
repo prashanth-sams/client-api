@@ -48,4 +48,8 @@ module ClientApi
     $logger.level = Logger::DEBUG
   end
 
+  def timeout=(secs)
+    @@timeout = secs
+  end
+
 end
