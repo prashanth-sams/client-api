@@ -1,0 +1,88 @@
+D, [2019-10-01T19:25:37.728566 #41691] DEBUG -- : Requested method == POST
+D, [2019-10-01T19:25:37.728622 #41691] DEBUG -- : Requested url == https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval
+D, [2019-10-01T19:25:37.728676 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:37.728694 #41691] DEBUG -- : Requested body == {}
+D, [2019-10-01T19:25:38.381766 #41691] DEBUG -- : Response code == 403
+D, [2019-10-01T19:25:38.381828 #41691] DEBUG -- : Response body == empty response body
+D, [2019-10-01T19:25:38.381885 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:38.381914 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:38.388808 #41691] DEBUG -- : Requested method == POST
+D, [2019-10-01T19:25:38.388850 #41691] DEBUG -- : Requested url == https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval
+D, [2019-10-01T19:25:38.388874 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo"}
+D, [2019-10-01T19:25:38.388885 #41691] DEBUG -- : Requested body == {}
+D, [2019-10-01T19:25:39.033338 #41691] DEBUG -- : Response code == 403
+D, [2019-10-01T19:25:39.033416 #41691] DEBUG -- : Response body == empty response body
+D, [2019-10-01T19:25:39.033473 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.033493 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:39.034213 #41691] DEBUG -- : Requested method == GET
+D, [2019-10-01T19:25:39.034254 #41691] DEBUG -- : Requested url == https://reqres.in/api/users
+D, [2019-10-01T19:25:39.034283 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.034298 #41691] DEBUG -- : Requested body == not available
+D, [2019-10-01T19:25:39.304368 #41691] DEBUG -- : Response code == 200
+D, [2019-10-01T19:25:39.304507 #41691] DEBUG -- : Response body == {"page"=>1, "per_page"=>6, "total"=>12, "total_pages"=>2, "data"=>[{"id"=>1, "email"=>"george.bluth@reqres.in", "first_name"=>"George", "last_name"=>"Bluth", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg"}, {"id"=>2, "email"=>"janet.weaver@reqres.in", "first_name"=>"Janet", "last_name"=>"Weaver", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"}, {"id"=>3, "email"=>"emma.wong@reqres.in", "first_name"=>"Emma", "last_name"=>"Wong", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/olegpogodaev/128.jpg"}, {"id"=>4, "email"=>"eve.holt@reqres.in", "first_name"=>"Eve", "last_name"=>"Holt", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg"}, {"id"=>5, "email"=>"charles.morris@reqres.in", "first_name"=>"Charles", "last_name"=>"Morris", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg"}, {"id"=>6, "email"=>"tracey.ramos@reqres.in", "first_name"=>"Tracey", "last_name"=>"Ramos", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/bigmancho/128.jpg"}]}
+D, [2019-10-01T19:25:39.304550 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.304565 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:39.305125 #41691] DEBUG -- : Requested method == POST
+D, [2019-10-01T19:25:39.305167 #41691] DEBUG -- : Requested url == https://reqres.in/api/users
+D, [2019-10-01T19:25:39.305197 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.305218 #41691] DEBUG -- : Requested body == {:name=>"prashanth sams"}
+D, [2019-10-01T19:25:39.908704 #41691] DEBUG -- : Response code == 201
+D, [2019-10-01T19:25:39.908760 #41691] DEBUG -- : Response body == {"name"=>"prashanth sams", "id"=>"651", "createdAt"=>"2019-10-01T15:25:39.833Z"}
+D, [2019-10-01T19:25:39.908799 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.908813 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:39.909371 #41691] DEBUG -- : Requested method == DELETE
+D, [2019-10-01T19:25:39.909411 #41691] DEBUG -- : Requested url == https://reqres.in/api/users/3
+D, [2019-10-01T19:25:39.909441 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:39.909455 #41691] DEBUG -- : Requested body == not available
+D, [2019-10-01T19:25:40.302896 #41691] DEBUG -- : Response code == 204
+D, [2019-10-01T19:25:40.302948 #41691] DEBUG -- : Response body == empty response body
+D, [2019-10-01T19:25:40.302994 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:40.303011 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:40.303530 #41691] DEBUG -- : Requested method == PUT
+D, [2019-10-01T19:25:40.303569 #41691] DEBUG -- : Requested url == https://reqres.in/api/users/2
+D, [2019-10-01T19:25:40.303596 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:40.303624 #41691] DEBUG -- : Requested body == {:data=>{:email=>"prashanth@mail.com", :first_name=>"Prashanth", :last_name=>"Sams"}}
+D, [2019-10-01T19:25:40.747385 #41691] DEBUG -- : Response code == 200
+D, [2019-10-01T19:25:40.747447 #41691] DEBUG -- : Response body == {"data"=>{"email"=>"prashanth@mail.com", "first_name"=>"Prashanth", "last_name"=>"Sams"}, "updatedAt"=>"2019-10-01T15:25:40.672Z"}
+D, [2019-10-01T19:25:40.747486 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:40.747501 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:40.748059 #41691] DEBUG -- : Requested method == PATCH
+D, [2019-10-01T19:25:40.748105 #41691] DEBUG -- : Requested url == https://reqres.in/api/users/2
+D, [2019-10-01T19:25:40.748138 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:40.748165 #41691] DEBUG -- : Requested body == {:data=>{:email=>"prashanth@mail.com", :first_name=>"Prashanth", :last_name=>"Sams"}}
+D, [2019-10-01T19:25:41.042298 #41691] DEBUG -- : Response code == 200
+D, [2019-10-01T19:25:41.042374 #41691] DEBUG -- : Response body == {"data"=>{"email"=>"prashanth@mail.com", "first_name"=>"Prashanth", "last_name"=>"Sams"}, "updatedAt"=>"2019-10-01T15:25:40.984Z"}
+D, [2019-10-01T19:25:41.042462 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.042499 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:41.043458 #41691] DEBUG -- : Requested method == POST
+D, [2019-10-01T19:25:41.043490 #41691] DEBUG -- : Requested url == https://reqres.in/api/users
+D, [2019-10-01T19:25:41.043508 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.043523 #41691] DEBUG -- : Requested body == {"name"=>"prashanth sams"}
+D, [2019-10-01T19:25:41.479273 #41691] DEBUG -- : Response code == 201
+D, [2019-10-01T19:25:41.479327 #41691] DEBUG -- : Response body == {"name"=>"prashanth sams", "id"=>"564", "createdAt"=>"2019-10-01T15:25:41.405Z"}
+D, [2019-10-01T19:25:41.479369 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.479384 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:41.480032 #41691] DEBUG -- : Requested method == GET
+D, [2019-10-01T19:25:41.480075 #41691] DEBUG -- : Requested url == https://jsonplaceholder.typicode.com/todos/1
+D, [2019-10-01T19:25:41.480105 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.480119 #41691] DEBUG -- : Requested body == not available
+D, [2019-10-01T19:25:41.973083 #41691] DEBUG -- : Response code == 200
+D, [2019-10-01T19:25:41.973165 #41691] DEBUG -- : Response body == {"userId"=>1, "id"=>1, "title"=>"delectus aut autem", "completed"=>false}
+D, [2019-10-01T19:25:41.973206 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.973219 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:41.974387 #41691] DEBUG -- : Requested method == POST
+D, [2019-10-01T19:25:41.974419 #41691] DEBUG -- : Requested url == https://reqres.in/api/users
+D, [2019-10-01T19:25:41.974443 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:41.974456 #41691] DEBUG -- : Requested body == {"name"=>"prashanth sams"}
+D, [2019-10-01T19:25:42.425889 #41691] DEBUG -- : Response code == 201
+D, [2019-10-01T19:25:42.425945 #41691] DEBUG -- : Response body == {"name"=>"prashanth sams", "id"=>"338", "createdAt"=>"2019-10-01T15:25:42.350Z"}
+D, [2019-10-01T19:25:42.425989 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:42.426004 #41691] DEBUG -- : =====================================================================================
+D, [2019-10-01T19:25:42.428141 #41691] DEBUG -- : Requested method == GET
+D, [2019-10-01T19:25:42.428201 #41691] DEBUG -- : Requested url == https://reqres.in/api/users/2
+D, [2019-10-01T19:25:42.428224 #41691] DEBUG -- : Requested headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:42.428235 #41691] DEBUG -- : Requested body == not available
+D, [2019-10-01T19:25:42.875756 #41691] DEBUG -- : Response code == 200
+D, [2019-10-01T19:25:42.875832 #41691] DEBUG -- : Response body == {"data"=>{"id"=>2, "email"=>"janet.weaver@reqres.in", "first_name"=>"Janet", "last_name"=>"Weaver", "avatar"=>"https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg"}}
+D, [2019-10-01T19:25:42.875870 #41691] DEBUG -- : Response headers == {"Content-Type"=>"application/json", "Accept"=>"application/json", "Authorization"=>"Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwQHNzdzByZA=="}
+D, [2019-10-01T19:25:42.875885 #41691] DEBUG -- : =====================================================================================
