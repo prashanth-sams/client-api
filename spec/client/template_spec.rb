@@ -20,7 +20,7 @@ RSpec.describe ClientApi do
     )
   end
 
-  it "single key-pair response validator", :post do
+  it "multi key-pair response validator", :post do
     post('/api/users', schema_from_json("./data/request/post.json"))
 
     expect(status).to eq(201)
@@ -39,6 +39,26 @@ RSpec.describe ClientApi do
     )
 
     validate({"key": "id", "operator": "eql?", "type": 'string'})
+  end
+
+  it "multi key-pair response validator - json tree", :get do
+    get('https://my-json-server.typicode.com/typicode/demo/db')
+
+    expect(status).to eq(200)
+    validate(
+        {
+            "key": "profile->name",
+            "value": "typicode",
+            "operator": "==",
+            "type": 'string'
+        },
+        {
+            "key": "posts->1->id",
+            "value": 2,
+            "operator": "==",
+            "type": 'integer'
+        }
+    )
   end
 
   it "json response schema validator", :get do

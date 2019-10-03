@@ -7,7 +7,14 @@ module ClientApi
       raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
       raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
-      key = data[:key]
+      @resp = resp
+      key = data[:key].split("->")
+
+      key.map do |method|
+        method = method.to_i if is_num?(method)
+        @resp = @resp.send(:[], method)
+      end
+
       value ||= data[:value]
       operator = data[:operator]
       type = data[:type] if data[:type] || data[:type] != {} || !data[:type].empty?
@@ -15,24 +22,24 @@ module ClientApi
       case operator
       when '=', '==', 'eql?', 'equal', 'equal?'
         # value validation
-        expect(body[key]).to eq(value) if value != nil
+        expect(@resp).to eq(value) if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| body[key].class.to_s.include? bool}).to be true
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to be true
         else
-          expect(body[key].class).to eq(datatype(type, value))
+          expect(@resp.class).to eq(datatype(type, value))
         end
 
       when '!', '!=', '!eql?', 'not equal', '!equal?'
         # value validation
-        expect(body[key]).not_to eq(value) if value != nil
+        expect(@resp).not_to eq(value) if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| body[key].class.to_s.include? bool}).not_to be true
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to be true
         else
-          expect(body[key].class).not_to eq(datatype(type, value))
+          expect(@resp.class).not_to eq(datatype(type, value))
         end
       else
         raise_error('operator not matching')
@@ -76,6 +83,14 @@ module ClientApi
       Bignum
     else
     end
+  end
+
+  def is_num?(str)
+    if Float(str)
+      true
+    end
+  rescue ArgumentError, TypeError
+    false
   end
 
 end
