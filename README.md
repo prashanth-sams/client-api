@@ -5,13 +5,11 @@
 > HTTP Rest API Client for RSpec
 
 ### Features
-- [x] Custom Header support
-- [x] Custom URL support
-- [x] Custom Timeout
-- [x] Datatype and key-Pair Validation
-- [x] Single Key-Pair response validation
-- [x] Multi Key-Pair response validation
-- [x] Schema Validation
+- [x] Custom Header, URL, and Timeout support
+- [x] Datatype and key-pair value validation
+- [x] Single key-pair response validation
+- [x] Multi key-pair response validation
+- [x] Schema validation
 - [x] JSON template as body and schema
 - [x] Logs support for debug
 - [x] Custom logs remover
@@ -155,8 +153,20 @@ validate(
         "type": 'string'
     },
     {
-        "key": "id",
-        "operator": "!=",
+        "key": "event",
+        "operator": "eql?",
+        "type": 'boolean'
+    },
+    {
+         "key": "posts->1->enabled",
+         "value": false,
+         "operator": "!=",
+         "type": 'boolean'
+    },
+    {
+        "key": "profile->name->id",
+        "value": 2,
+        "operator": "==",
         "type": 'integer'
     }
 )
