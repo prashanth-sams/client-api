@@ -1,4 +1,4 @@
-RSpec.describe ClientApi do
+RSpec.describe 'Response and status validation' do
 
   it "{GET request} 200 response", :get do
     get('/api/users')
