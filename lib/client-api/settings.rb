@@ -20,14 +20,16 @@ module ClientApi
     ClientApi.configuration.headers || ''
   end
 
-  def basic_auth=(args)
-    @@basic_auth_username = args['Username']
-    @@basic_auth_password = args['Password']
+  def basic_auth
+    ClientApi.configuration.basic_auth || ''
   end
 
-  def json_output=(args)
-    @@output_json_dir = args['Dirname']
-    @@output_json_filename = args['Filename']
+  def json_output
+    ClientApi.configuration.json_output || ''
+  end
+
+  def time_out
+    ClientApi.configuration.time_out || ''
   end
 
   def logger=(args)
@@ -46,10 +48,6 @@ module ClientApi
 
     $logger = Logger.new(File.new("#{output_logs_dir}/#{output_logs_filename}_#{now}.log", 'w'))
     $logger.level = Logger::DEBUG
-  end
-
-  def timeout=(secs)
-    @@timeout = secs
   end
 
 end

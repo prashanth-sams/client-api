@@ -45,7 +45,7 @@ module ClientApi
     if uri(args).scheme == "https"
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      http.read_timeout = @@timeout.to_i
+      http.read_timeout = time_out.to_i
       @http = http
     end
   end
@@ -56,7 +56,7 @@ module ClientApi
 
   def header(options = {})
     mod_headers = options[:headers] || {}
-    headers['Authorization'] = basic_encode(:username => @@basic_auth_username, :password => @@basic_auth_password)
+    headers['Authorization'] = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password'])
     headers.merge(mod_headers)
   end
 
