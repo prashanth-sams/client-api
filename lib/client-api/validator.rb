@@ -93,4 +93,68 @@ module ClientApi
     false
   end
 
+  def validate_json(actual, expected)
+    param1 = JSON.parse(actual.to_json)
+    param2 = JSON.parse(expected.to_json)
+
+    @actual_key = []
+    @actual_value = []
+    deep_traverse(param2) do |path, value|
+      if !value.is_a?(Hash)
+        key_path = path.map! {|k| k}
+        @actual_key << key_path.join("->").to_s
+        @actual_value << value
+      end
+    end
+
+    Hash[@actual_key.zip(@actual_value)].map do |data|
+      @resp = param1
+      key = data[0].split("->")
+
+      key.map do |method|
+        method = method.to_i if is_num?(method)
+        @resp = @resp.send(:[], method)
+      end
+
+      value = data[1]
+      @assert = []
+
+      if !value.is_a?(Array)
+        expect(@resp).to eq(value)
+      else
+        @resp.each_with_index do |resp, i|
+          value[0].to_a.each_with_index do |val, j|
+            if resp.to_a.include? val
+              expect(resp.to_a.include? val).to be true
+              @assert << true
+              return if @assert.count(true) == value[0].to_a.count && value[0].to_a.count == j + 1
+            else
+              @assert << false
+            end
+          end
+          expect(@resp).to eq(value) if @resp.count == i + 1
+        end
+      end
+    end
+  end
+
+  def deep_traverse(hash, &block)
+    stack = hash.map {|k, v| [[k], v]}
+
+    while not stack.empty?
+      key, value = stack.pop
+      yield(key, value)
+      if value.is_a? Hash
+        value.each do |k, v|
+          if v.is_a?(String) then
+            if v.empty? then
+              v = nil
+            end
+          end
+          stack.push [key.dup << k, v]
+        end
+      end
+    end
+  end
+
 end

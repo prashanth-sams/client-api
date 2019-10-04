@@ -9,7 +9,8 @@
 - [x] Datatype and key-pair value validation
 - [x] Single key-pair response validation
 - [x] Multi key-pair response validation
-- [x] Schema validation
+- [x] JSON Schema validation
+- [x] JSON response structure value validation
 - [x] JSON template as body and schema
 - [x] Logs support for debug
 - [x] Custom logs remover
@@ -196,7 +197,7 @@ validate(
 | Trueclass | `trueclass`         |
 | Bignum | `bignum`         |
 
-### schema validation
+### json schema validation
 ```ruby
 validate_schema(
   schema_from_json('./data/schema/get_user_schema.json'),
@@ -261,6 +262,62 @@ validate_schema(
 validate_schema(
     schema_from_json('./data/schema/get_user_schema.json'),
     body
+)
+```
+
+### json structure validation
+> json response structure value validation
+```ruby
+actual_body = {
+    "posts":
+        {
+            "prashanth": {
+                "id": 1,
+                "title": "Post 1"
+            },
+            "sams": {
+                "id": 2,
+                "title": "Post 2"
+            }
+        },
+    "profile":
+        {
+            "id": 44,
+            "title": "Post 44"
+        }
+}
+
+validate_json(actual_body,
+{
+    "posts":
+        {
+            "prashanth": {
+                "id": 1,
+                "title": "Post 1"
+            },
+            "sams": {
+                "id": 2
+            }
+        },
+    "profile":
+        {
+            "title": "Post 44"
+        }
+})
+```
+```ruby
+validate_json(body,
+  {
+      "posts": [
+          {
+              "id": 2,
+              "title": "Post 2"
+          }
+      ],
+      "profile": {
+          "name": "typicode"
+      }
+  }
 )
 ```
 

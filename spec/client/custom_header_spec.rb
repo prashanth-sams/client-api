@@ -1,4 +1,4 @@
-RSpec.describe ClientApi do
+RSpec.describe 'Custom header' do
 
   it "custom header", :post do
     post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
