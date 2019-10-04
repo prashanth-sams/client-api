@@ -9,8 +9,8 @@
 - [x] Datatype and key-pair value validation
 - [x] Single key-pair response validation
 - [x] Multi key-pair response validation
-- [x] JSON Schema validation
-- [x] JSON response structure value validation
+- [x] JSON schema validation
+- [x] JSON structure validation
 - [x] JSON template as body and schema
 - [x] Logs support for debug
 - [x] Custom logs remover
@@ -118,7 +118,7 @@ end
 ```ruby
 ClientApi.configure do |config|
   ...
-  config.timeout = 10
+  config.time_out = 10
 end
 ```
 > Output as `json` template 
