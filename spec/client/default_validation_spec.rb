@@ -1,9 +1,9 @@
-RSpec.describe 'Default validation' do
+describe 'Default validation' do
 
   it "boolean datatype validator", :get do
-    get('https://jsonplaceholder.typicode.com/todos/1')
+    $api.get('https://jsonplaceholder.typicode.com/todos/1')
 
-    expect(status).to eq(200)
+    expect($api.status).to eq(200)
     validate(
         {
             "key": "completed",
@@ -15,9 +15,9 @@ RSpec.describe 'Default validation' do
   end
 
   it "multi key-pair response validator", :post do
-    post('/api/users', schema_from_json("./data/request/post.json"))
+    $api.post('/api/users', schema_from_json("./data/request/post.json"))
 
-    expect(status).to eq(201)
+    expect($api.status).to eq(201)
     validate(
         {
             "key": "name",
@@ -36,9 +36,9 @@ RSpec.describe 'Default validation' do
   end
 
   it "multi key-pair response validator - json tree", :get do
-    get('https://my-json-server.typicode.com/typicode/demo/db')
+    $api.get('https://my-json-server.typicode.com/typicode/demo/db')
 
-    expect(status).to eq(200)
+    expect($api.status).to eq(200)
     validate(
         {
             "key": "profile->name",

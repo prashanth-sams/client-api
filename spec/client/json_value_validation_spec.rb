@@ -1,9 +1,9 @@
-RSpec.describe 'JSON value validation' do
+describe 'JSON value validation' do
 
   it "json response value structure validator", :get do
-    get('https://my-json-server.typicode.com/typicode/demo/db')
+    $api.get('https://my-json-server.typicode.com/typicode/demo/db')
 
-    validate_json(body,
+    validate_json($api.body,
       {
           "posts": [
               {

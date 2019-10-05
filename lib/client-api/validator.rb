@@ -7,7 +7,7 @@ module ClientApi
       raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
       raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
-      @resp = resp
+      @resp = $api.body
       key = data[:key].split("->")
 
       key.map do |method|

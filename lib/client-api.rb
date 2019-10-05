@@ -3,6 +3,7 @@ require "client-api/settings"
 require "client-api/base"
 require "client-api/request"
 require "client-api/validator"
+require "client-api/loggers"
 
 RSpec.configure do |config|
   config.add_setting :base_url
@@ -13,4 +14,4 @@ RSpec.configure do |config|
   config.include ClientApi
 end
 
-include ClientApi
+include Loggers
