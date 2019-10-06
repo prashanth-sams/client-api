@@ -1,10 +1,10 @@
 describe 'JSON schema validation' do
 
   it "json response schema validator", :get do
-    @api = ClientApi::Api.new
-    @api.get('/api/users/2')
+    api = ClientApi::Api.new
+    api.get('/api/users/2')
 
-    expect(@api.status).to eq(200)
+    expect(api.status).to eq(200)
     validate_schema(
         {
             "required": [
@@ -51,7 +51,7 @@ describe 'JSON schema validation' do
 
     validate_schema(
         schema_from_json('./data/schema/get_user_schema.json'),
-        @api.body
+        api.body
     )
   end
 

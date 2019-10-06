@@ -1,12 +1,12 @@
 describe 'Default validation' do
 
   it "boolean datatype validator", :get do
-    @api = ClientApi::Api.new
-    @api.get('https://jsonplaceholder.typicode.com/todos/1')
+    api = ClientApi::Api.new
+    api.get('https://jsonplaceholder.typicode.com/todos/1')
 
-    expect(@api.status).to eq(200)
+    expect(api.status).to eq(200)
     validate(
-        @api.body,
+        api.body,
         {
             "key": "completed",
             "value": false,
@@ -17,12 +17,12 @@ describe 'Default validation' do
   end
 
   it "multi key-pair response validator", :post do
-    @api = ClientApi::Api.new
-    @api.post('/api/users', schema_from_json("./data/request/post.json"))
+    api = ClientApi::Api.new
+    api.post('/api/users', schema_from_json("./data/request/post.json"))
 
-    expect(@api.status).to eq(201)
+    expect(api.status).to eq(201)
     validate(
-        @api.body,
+        api.body,
         {
             "key": "name",
             "value": "prashanth sams",
@@ -40,12 +40,12 @@ describe 'Default validation' do
   end
 
   it "multi key-pair response validator - json tree", :get do
-    @api = ClientApi::Api.new
-    @api.get('https://my-json-server.typicode.com/typicode/demo/db')
+    api = ClientApi::Api.new
+    api.get('https://my-json-server.typicode.com/typicode/demo/db')
 
-    expect(@api.status).to eq(200)
+    expect(api.status).to eq(200)
     validate(
-        @api.body,
+        api.body,
         {
             "key": "profile->name",
             "value": "typicode",

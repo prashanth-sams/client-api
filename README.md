@@ -47,42 +47,48 @@ ClientApi.configure do |config|
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 end
 ```
+Declare a variable for `client-api` to create an object
+```ruby
+api = ClientApi::Api.new
+```
 
 RSpec test scenarios look like,
 ```ruby
 it "GET request" do
-  get('/api/users')
-  expect(status).to eq(200)
-  expect(code).to eq(200)
-  expect(message).to eq('OK')
+  api = ClientApi::Api.new
+  
+  api.get('/api/users')
+  expect(api.status).to eq(200)
+  expect(api.code).to eq(200)
+  expect(api.message).to eq('OK')
 end
 
 it "POST request" do
-  post('/api/users', {"name": "prashanth sams"})
-  expect(status).to eq(201)
+  api.post('/api/users', {"name": "prashanth sams"})
+  expect(api.status).to eq(201)
 end
 
 it "DELETE request" do
-  delete('/api/users/3')
-  expect(status).to eq(204)
+  api.delete('/api/users/3')
+  expect(api.status).to eq(204)
 end
 
 it "PUT request" do
-  put('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
-  expect(status).to eq(200)
+  api.put('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+  expect(api.status).to eq(200)
 end
 
 it "PATCH request" do
-  patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
-  expect(status).to eq(200)
+  api.patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
+  expect(api.status).to eq(200)
 end
 ```
 
 > Using `json` template as body
 ```ruby
 it "JSON template as body" do
-  post('/api/users', payload("./data/request/post.json"))
-  expect(status).to eq(201)
+  api.post('/api/users', payload("./data/request/post.json"))
+  expect(api.status).to eq(201)
 end
 ```
 
@@ -90,19 +96,19 @@ end
 ```ruby
 it "GET request with custom header" do
   get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
-  expect(status).to eq(200)
+  expect(api.status).to eq(200)
 end
 
 it "PATCH request with custom header" do
-  patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}}, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
-  expect(status).to eq(200)
+  api.patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}}, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
+  expect(api.status).to eq(200)
 end
 ```
 > Full url support
 ```ruby
 it "full url", :post do
-  post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
-  expect(status).to eq(403)
+  api.post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
+  expect(api.status).to eq(403)
 end
 ```
 > Basic Authentication 
@@ -135,7 +141,7 @@ end
 ### validation
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
-validate(
+validate( api.body,
     {
         "key": "name",
         "value": "prashanth sams",
@@ -146,7 +152,7 @@ validate(
 ``` 
 > Multi key-pair values response validator
 ```ruby
-validate(
+validate( api.body,
     {
         "key": "name",
         "value": "prashanth sams",
@@ -261,7 +267,7 @@ validate_schema(
 ```ruby
 validate_schema(
     schema_from_json('./data/schema/get_user_schema.json'),
-    body
+    api.body
 )
 ```
 
@@ -287,7 +293,7 @@ actual_body = {
         }
 }
 
-validate_json(actual_body,
+validate_json( actual_body,
 {
     "posts":
         {
@@ -306,7 +312,7 @@ validate_json(actual_body,
 })
 ```
 ```ruby
-validate_json(body,
+validate_json( api.body,
   {
       "posts": [
           {
@@ -327,9 +333,7 @@ validate_json(body,
 ```ruby
 ClientApi.configure do |config|
   ...
-  config.before(:suite) do
-    config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
-  end
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
 end
 ``` 
 
