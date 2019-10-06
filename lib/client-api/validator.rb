@@ -2,12 +2,12 @@ require "json-schema"
 
 module ClientApi
 
-  def validate(*options)
+  def validate(res, *options)
     options.map do |data|
       raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
       raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
-      @resp = resp
+      @resp = res
       key = data[:key].split("->")
 
       key.map do |method|
@@ -97,8 +97,7 @@ module ClientApi
     param1 = JSON.parse(actual.to_json)
     param2 = JSON.parse(expected.to_json)
 
-    @actual_key = []
-    @actual_value = []
+    @actual_key, @actual_value = [], []
     deep_traverse(param2) do |path, value|
       if !value.is_a?(Hash)
         key_path = path.map! {|k| k}
@@ -117,23 +116,44 @@ module ClientApi
       end
 
       value = data[1]
-      @assert = []
+      @assert, @final_assert, @overall = [], [], []
 
       if !value.is_a?(Array)
         expect(@resp).to eq(value)
       else
         @resp.each_with_index do |resp, i|
-          value[0].to_a.each_with_index do |val, j|
-            if resp.to_a.include? val
-              expect(resp.to_a.include? val).to be true
-              @assert << true
-              return if @assert.count(true) == value[0].to_a.count && value[0].to_a.count == j + 1
-            else
-              @assert << false
+          value.to_a.each_with_index do |val1, j|
+            val1.to_a.each_with_index do |val2, k|
+              if resp.to_a.include? val2
+                @assert << true
+              else
+                @assert << false
+              end
             end
+            @final_assert << @assert
+            @assert = []
+
+            if @resp.count == @final_assert.count
+              @final_assert.each_with_index do |result, i|
+                if result.count(true) == val1.count
+                  @overall << true
+                  break
+                elsif @final_assert.count == i+1
+                  expect(@resp).to eq(value)
+                end
+              end
+              @final_assert = []
+            end
+
           end
-          expect(@resp).to eq(value) if @resp.count == i + 1
         end
+
+        if @overall.count(true) == value.count
+          return
+        else
+          expect(@resp).to eq(value)
+        end
+
       end
     end
   end

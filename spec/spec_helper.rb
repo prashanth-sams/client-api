@@ -18,6 +18,7 @@ RSpec.configure do |config|
   end
 
   config.filter_run_when_matching :focus
+  config.expose_dsl_globally = true
 end
 
 ClientApi.configure do |config|
@@ -26,8 +27,5 @@ ClientApi.configure do |config|
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10
-
-  config.before(:suite) do
-    config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 1}
-  end
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
 end

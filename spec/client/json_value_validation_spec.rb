@@ -1,9 +1,10 @@
-RSpec.describe 'JSON value validation' do
+describe 'JSON value validation' do
 
   it "json response value structure validator", :get do
-    get('https://my-json-server.typicode.com/typicode/demo/db')
+    @api = ClientApi::Api.new
+    @api.get('https://my-json-server.typicode.com/typicode/demo/db')
 
-    validate_json(body,
+    validate_json(@api.body,
       {
           "posts": [
               {
@@ -22,7 +23,20 @@ RSpec.describe 'JSON value validation' do
             {
                 "prashanth": {
                     "id": 1,
-                    "title": "Post 1"
+                    "title": [
+                        {
+                            "post": 1,
+                            "ref": "ref-1"
+                        },
+                        {
+                            "post": 2,
+                            "ref": "ref-2"
+                        },
+                        {
+                            "post": 3,
+                            "ref": "ref-3"
+                        }
+                    ]
                 },
                 "sams": {
                     "id": 2,
@@ -46,10 +60,19 @@ RSpec.describe 'JSON value validation' do
             {
                 "prashanth": {
                     "id": 1,
-                    "title": "Post 1"
+                    "title": [
+                        {
+                            "post": 1
+                        },
+                        {
+                            "post": 2,
+                            "ref": "ref-2"
+                        }
+                    ]
                 },
                 "heera": {
-                    "id": 3
+                    "id": 3,
+                    "title": "Post 3"
                 }
             },
         "profile":

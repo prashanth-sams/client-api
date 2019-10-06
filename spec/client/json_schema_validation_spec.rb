@@ -1,9 +1,10 @@
-RSpec.describe 'JSON schema validation' do
+describe 'JSON schema validation' do
 
   it "json response schema validator", :get do
-    get('/api/users/2')
+    @api = ClientApi::Api.new
+    @api.get('/api/users/2')
 
-    expect(status).to eq(200)
+    expect(@api.status).to eq(200)
     validate_schema(
         {
             "required": [
@@ -50,7 +51,7 @@ RSpec.describe 'JSON schema validation' do
 
     validate_schema(
         schema_from_json('./data/schema/get_user_schema.json'),
-        body
+        @api.body
     )
   end
 
