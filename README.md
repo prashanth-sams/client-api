@@ -95,7 +95,7 @@ end
 > Add custom header
 ```ruby
 it "GET request with custom header" do
-  get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
+  api.get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
   expect(api.status).to eq(200)
 end
 
@@ -124,7 +124,7 @@ end
 ```ruby
 ClientApi.configure do |config|
   ...
-  config.time_out = 10
+  config.time_out = 10 # in secs
 end
 ```
 > Output as `json` template 
