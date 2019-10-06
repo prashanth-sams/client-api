@@ -8,16 +8,15 @@ Gem::Specification.new do |spec|
   spec.authors       = ["prashanth-sams"]
   spec.email         = ["sams.prashanth@gmail.com"]
 
-  spec.summary       = %q{HTTP Rest API client}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{HTTP Rest API client for RSpec Api Test framework}
+  spec.description   = %q{client-api helps you write api tests quickly using rspec with different levels of validations}
+  spec.homepage      = "https://github.com/prashanth-sams/client-api"
   spec.license       = "MIT"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
-
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://github.com/prashanth-sams/client-api"
+  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/github/prashanth-sams/client-api/master"
+  spec.metadata["bug_tracker_uri"] = "https://github.com/prashanth-sams/client-api/issues"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -31,4 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "json-schema", "~> 2.0"
+  spec.add_development_dependency "logger", "~> 1.0"
 end
