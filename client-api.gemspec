@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["prashanth-sams"]
   spec.email         = ["sams.prashanth@gmail.com"]
 
-  spec.summary       = %q{HTTP Rest API client for RSpec Api Test framework}
-  spec.description   = %q{client-api helps you write api tests quickly using rspec with different levels of validations}
+  spec.summary       = "HTTP Rest API client for RSpec Api Test framework"
   spec.homepage      = "https://github.com/prashanth-sams/client-api"
   spec.license       = "MIT"
 
@@ -20,9 +19,7 @@ Gem::Specification.new do |spec|
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  end
+  spec.files         = ["lib/client-api.rb", "lib/client-api/base.rb", "lib/client-api/loggers.rb", "lib/client-api/request.rb", "lib/client-api/settings.rb", "lib/client-api/validator.rb", "lib/client-api/version.rb"]
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
