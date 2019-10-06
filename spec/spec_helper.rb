@@ -26,6 +26,6 @@ ClientApi.configure do |config|
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
-  config.time_out = 10
+  config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
 end

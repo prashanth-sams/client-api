@@ -22,24 +22,24 @@ module ClientApi
       case operator
       when '=', '==', 'eql?', 'equal', 'equal?'
         # value validation
-        expect(@resp).to eq(value) if value != nil
+        expect(value).to eq(@resp) if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
           expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to be true
         else
-          expect(@resp.class).to eq(datatype(type, value))
+          expect(datatype(type, value)).to eq(@resp.class)
         end
 
       when '!', '!=', '!eql?', 'not equal', '!equal?'
         # value validation
-        expect(@resp).not_to eq(value) if value != nil
+        expect(value).not_to eq(@resp) if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
           expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to be true
         else
-          expect(@resp.class).not_to eq(datatype(type, value))
+          expect(datatype(type, value)).not_to eq(@resp.class)
         end
       else
         raise_error('operator not matching')
@@ -119,7 +119,7 @@ module ClientApi
       @assert, @final_assert, @overall = [], [], []
 
       if !value.is_a?(Array)
-        expect(@resp).to eq(value)
+        expect(value).to eq(@resp)
       else
         @resp.each_with_index do |resp, i|
           value.to_a.each_with_index do |val1, j|
@@ -139,7 +139,7 @@ module ClientApi
                   @overall << true
                   break
                 elsif @final_assert.count == i+1
-                  expect(@resp).to eq(value)
+                  expect(value).to eq(@resp)
                 end
               end
               @final_assert = []
@@ -151,7 +151,7 @@ module ClientApi
         if @overall.count(true) == value.count
           return
         else
-          expect(@resp).to eq(value)
+          expect(value).to eq(@resp)
         end
 
       end
