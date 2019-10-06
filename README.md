@@ -47,7 +47,7 @@ ClientApi.configure do |config|
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 end
 ```
-Declare a variable for `client-api` to create an object
+Create `client-api` object with custom variable
 ```ruby
 api = ClientApi::Api.new
 ```
