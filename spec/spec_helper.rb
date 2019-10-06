@@ -27,9 +27,5 @@ ClientApi.configure do |config|
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10
-
-  config.before(:suite) do
-    config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
-    $api = ClientApi::Api.new
-  end
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
 end
