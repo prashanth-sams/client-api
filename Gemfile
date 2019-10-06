@@ -7,4 +7,3 @@ gem 'rspec'
 gem "rake"
 gem 'json-schema'
 gem "logger"
-gem 'byebug'
