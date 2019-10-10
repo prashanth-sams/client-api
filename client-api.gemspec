@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "net/http", "~> 2.0"
   spec.add_development_dependency "json-schema", "~> 2.0"
   spec.add_development_dependency "logger", "~> 1.0"
 end
