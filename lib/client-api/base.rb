@@ -36,7 +36,7 @@ module ClientApi
     end
 
     def body
-      if [200, 201, 204].include? status
+      if [200, 201, 202, 204].include? status
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
           File.open("./output/#{json_output['Filename']}.json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}

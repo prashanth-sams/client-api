@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["prashanth-sams"]
   spec.email         = ["sams.prashanth@gmail.com"]
 
-  spec.summary       = "HTTP Rest API client for RSpec Api Test framework"
+  spec.summary       = "HTTP Rest Api client for RSpec and an automation framework that binds within itself"
   spec.homepage      = "https://github.com/prashanth-sams/client-api"
   spec.license       = "MIT"
 
@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "net/http", "~> 2.0"
   spec.add_development_dependency "json-schema", "~> 2.0"
   spec.add_development_dependency "logger", "~> 1.0"
 end
