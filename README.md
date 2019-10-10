@@ -178,6 +178,7 @@ validate( api.body,
     }
 )
 ```
+<img src="https://i.imgur.com/zQnhMUN.png" height="120" width="400">
 
 ###### Operator
 | Type  |  options |

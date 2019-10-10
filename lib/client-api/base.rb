@@ -41,7 +41,7 @@ module ClientApi
           FileUtils.mkdir_p "#{json_output['Dirname']}"
           File.open("./output/#{json_output['Filename']}.json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}
         end
-        JSON.parse(@output.body)
+        JSON.parse(@output.body) unless @output.body.empty?
       else
         JSON.parse(@output.message)
       end
@@ -52,7 +52,7 @@ module ClientApi
     end
 
     def post_logger
-      (@output.body.nil? || @output.body == "{}") ? res_body = 'empty response body' : res_body = body
+      (@output.body == "" || @output.body.nil? || @output.body == "{}") ? res_body = 'empty response body' : res_body = body
 
       $logger.debug("Response code == #{@output.code.to_i}")
       $logger.debug("Response body == #{res_body}")

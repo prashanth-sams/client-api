@@ -22,24 +22,24 @@ module ClientApi
       case operator
       when '=', '==', 'eql?', 'equal', 'equal?'
         # value validation
-        expect(value).to eq(@resp) if value != nil
+        expect(value).to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to be true
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to be true, lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         else
-          expect(datatype(type, value)).to eq(@resp.class)
+          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         end
 
       when '!', '!=', '!eql?', 'not equal', '!equal?'
         # value validation
-        expect(value).not_to eq(@resp) if value != nil
+        expect(value).not_to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to be true
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to be true, lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         else
-          expect(datatype(type, value)).not_to eq(@resp.class)
+          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         end
       else
         raise_error('operator not matching')
@@ -177,4 +177,21 @@ module ClientApi
     end
   end
 
+end
+
+class String
+  def black;          "\e[30m#{self}\e[0m" end
+  def red;            "\e[31m#{self}\e[0m" end
+  def green;          "\e[32m#{self}\e[0m" end
+  def brown;          "\e[33m#{self}\e[0m" end
+  def blue;           "\e[34m#{self}\e[0m" end
+  def magenta;        "\e[35m#{self}\e[0m" end
+  def cyan;           "\e[36m#{self}\e[0m" end
+  def gray;           "\e[37m#{self}\e[0m" end
+
+  def bold;           "\e[1m#{self}\e[22m" end
+  def italic;         "\e[3m#{self}\e[23m" end
+  def underline;      "\e[4m#{self}\e[24m" end
+  def blink;          "\e[5m#{self}\e[25m" end
+  def reverse_color;  "\e[7m#{self}\e[27m" end
 end
