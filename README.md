@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/client-api.svg)](http://badge.fury.io/rb/client-api)
 [![Build Status](https://travis-ci.org/prashanth-sams/client-api.svg?branch=master)](https://travis-ci.org/prashanth-sams/client-api)
-> HTTP Rest Api client for RSpec and an automation framework that binds within itself 
+> HTTP Rest Api client for RSpec test automation framework that binds within itself 
 
 ### Features
 - [x] Custom Header, URL, and Timeout support
@@ -46,6 +46,10 @@ Add this config snippet in the `spec_helper.rb` file:
 ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
+  config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
+  config.time_out = 10  # in secs
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
 end
 ```
 Create `client-api` object with custom variable
