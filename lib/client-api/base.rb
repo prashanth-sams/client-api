@@ -6,6 +6,10 @@ module ClientApi
 
     include ClientApi
 
+    def initialize
+      ((FileUtils.rm Dir.glob("./#{json_output['Dirname']}/*.json"); $roo = true)) if json_output && $roo == nil
+    end
+
     def get(url, headers = nil)
       @output = get_request(url, :headers => headers)
       post_logger if $logger
@@ -39,7 +43,8 @@ module ClientApi
       unless @output.body == "" || @output.body.nil? || @output.body == "{}"
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
-          File.open("./output/#{json_output['Filename']}.json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}
+          time_now = (Time.now.to_f).to_s.gsub('.','')
+          File.open("./#{json_output['Dirname']}/#{json_output['Filename']+"_"+time_now}""#{time_now}"".json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}
         end
         JSON.parse(@output.body)
       end
