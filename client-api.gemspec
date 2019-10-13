@@ -5,7 +5,7 @@ require "client-api/version"
 Gem::Specification.new do |spec|
   spec.name          = "client-api"
   spec.version       = ClientApi::VERSION
-  spec.authors       = ["prashanth-sams"]
+  spec.authors       = ["Prashanth Sams"]
   spec.email         = ["sams.prashanth@gmail.com"]
 
   spec.summary       = "HTTP Rest Api client for RSpec and an automation framework that binds within itself"
