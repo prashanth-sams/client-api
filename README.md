@@ -46,6 +46,10 @@ Add this config snippet in the `spec_helper.rb` file:
 ClientApi.configure do |config|
   config.base_url = 'https://reqres.in'
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
+  config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
+  config.time_out = 10  # in secs
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
 end
 ```
 Create `client-api` object with custom variable
