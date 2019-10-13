@@ -1,5 +1,3 @@
-require 'logger'
-
 module ClientApi
 
   def self.configure

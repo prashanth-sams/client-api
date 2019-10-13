@@ -12,6 +12,7 @@
 - [x] JSON schema validation
 - [x] JSON structure validation
 - [x] JSON template as body and schema
+- [x] Support to store JSON responses of each tests for the current run
 - [x] Logs support for debug
 - [x] Custom logs remover
 

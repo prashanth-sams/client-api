@@ -44,7 +44,11 @@ module ClientApi
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
           time_now = (Time.now.to_f).to_s.gsub('.','')
-          File.open("./#{json_output['Dirname']}/#{json_output['Filename']+"_"+time_now}""#{time_now}"".json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}
+          begin
+            File.open("./#{json_output['Dirname']}/#{json_output['Filename']+"_"+time_now}""#{time_now}"".json", "wb") {|file| file.puts JSON.pretty_generate(JSON.parse(@output.body))}
+          rescue StandardError => e
+            raise("\n"+" Not a compatible (or) Invalid JSON response  => [kindly check the uri & request details]".brown + " \n\n #{e.message}")
+          end
         end
         JSON.parse(@output.body)
       end
