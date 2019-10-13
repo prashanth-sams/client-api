@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/client-api.svg)](http://badge.fury.io/rb/client-api)
 [![Build Status](https://travis-ci.org/prashanth-sams/client-api.svg?branch=master)](https://travis-ci.org/prashanth-sams/client-api)
-> HTTP Rest Api client for RSpec and an automation framework that binds within itself 
+> HTTP Rest Api client for RSpec test automation framework that binds within itself 
 
 ### Features
 - [x] Custom Header, URL, and Timeout support
