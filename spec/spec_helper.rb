@@ -2,7 +2,6 @@ require "bundler/setup"
 require "client-api"
 require "rspec"
 require "rspec/expectations"
-require "net/http"
 require "json"
 
 RSpec.configure do |config|

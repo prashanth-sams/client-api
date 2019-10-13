@@ -1,3 +1,5 @@
+require "net/http"
+
 module ClientApi
 
   class Request
