@@ -141,7 +141,7 @@ ClientApi.configure do |config|
 end
 ```
 
-<img src="https://i.imgur.com/j21B9gC.png" height="200" width="400">
+<img src="https://i.imgur.com/tQ46LgF.png" height="230" width="750">
 
 ### validation
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
@@ -205,8 +205,8 @@ validate( api.body,
 | Complex | `complex`         |
 | Rational | `rational`         |
 | Fixnum | `fixnum`         |
-| Falseclass | `falseclass`         |
-| Trueclass | `trueclass`         |
+| Falseclass | `falseclass`, `false`         |
+| Trueclass | `trueclass`, `true`         |
 | Bignum | `bignum`         |
 
 ### json schema validation

@@ -26,7 +26,7 @@ module ClientApi
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to be true, lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         else
           expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         end
@@ -37,7 +37,7 @@ module ClientApi
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to be true, lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         else
           expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
         end
@@ -49,7 +49,7 @@ module ClientApi
 
   def validate_schema(param1, param2)
     expected_schema = JSON::Validator.validate(param1, param2)
-    expect(expected_schema).to be true
+    expect(expected_schema).to eq(true)
   end
 
   def datatype(type, value)
@@ -65,6 +65,10 @@ module ClientApi
       Object
     elsif (type.downcase == 'boolean') || (type.downcase == 'bool')
       value === true ? TrueClass : FalseClass
+    elsif (type.downcase == 'falseclass') || (type.downcase == 'false')
+      FalseClass
+    elsif (type.downcase == 'trueclass') || (type.downcase == 'true')
+      TrueClass
     elsif type.downcase == 'float'
       Float
     elsif type.downcase == 'hash'
@@ -75,10 +79,6 @@ module ClientApi
       Rational
     elsif type.downcase == 'fixnum'
       Fixnum
-    elsif type.downcase == 'falseclass'
-      FalseClass
-    elsif type.downcase == 'trueclass'
-      TrueClass
     elsif type.downcase == 'bignum'
       Bignum
     else
