@@ -5,4 +5,5 @@ git_source(:github) {|repo_name| "https://github.com/prashanth-sams/client-api" 
 
 gem 'rspec'
 gem 'rake'
-gem 'client-api', '~> 0.1.7'
+gem 'json-schema'
+gem 'byebug'
