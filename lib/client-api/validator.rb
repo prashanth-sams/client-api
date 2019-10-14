@@ -26,9 +26,9 @@ module ClientApi
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         else
-          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
 
       when '!', '!=', '!eql?', 'not equal', '!equal?'
@@ -37,9 +37,9 @@ module ClientApi
 
         # datatype validation
         if (type == "boolean" || type == "bool") && value.nil?
-          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(%w[TrueClass, FalseClass].any? {|bool| @resp.class.to_s.include? bool}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         else
-          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[type]: \"#{data[:type]}\"\n"}
+          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
       else
         raise_error('operator not matching')

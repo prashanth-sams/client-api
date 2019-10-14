@@ -1,4 +1,5 @@
 require "net/http"
+require 'openssl'
 
 module ClientApi
 
@@ -49,6 +50,10 @@ module ClientApi
       if uri(args).scheme == "https"
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        http.read_timeout = time_out.to_i
+        @http = http
+      elsif uri(args).scheme == "http"
+        http.use_ssl = false
         http.read_timeout = time_out.to_i
         @http = http
       end
