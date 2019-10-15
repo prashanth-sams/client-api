@@ -65,7 +65,8 @@ module ClientApi
 
     def header(options = {})
       mod_headers = options[:headers] || {}
-      headers['Authorization'] = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password'])
+      authorization = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password'])
+      headers['Authorization'] = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password']) if authorization != "Basic Og=="
       headers.merge(mod_headers)
     end
 
