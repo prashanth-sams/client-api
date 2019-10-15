@@ -1,5 +1,4 @@
 require "json-schema"
-require "byebug"
 
 module ClientApi
 
