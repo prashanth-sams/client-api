@@ -181,6 +181,17 @@ validate( api.body,
         "value": 2,
         "operator": "==",
         "type": 'integer'
+    },
+    {
+        "key": "profile->name->id",
+        "value": 2,
+        "operator": "<",
+        "type": 'integer'
+    },
+    {
+        "key": "profile->name->id",
+        "operator": ">=",
+        "value": 2,
     }
 )
 ```
@@ -191,6 +202,8 @@ validate( api.body,
 | ---      | ---         |
 | Equal | `=`, `==`, `eql?`, `equal`, `equal?`         |
 | Not Equal | `!`, `!=`, `!eql?`, `not equal`, `!equal?`         |
+| Greater than | `>`, `>=`, `greater than`, `greater than or equal to`         |
+| Less than | `<`, `<=`, `less than`, `less than or equal to`, `lesser than`, `lesser than or equal to`         |
 
 ###### Datatype
 | Type  |  options |
