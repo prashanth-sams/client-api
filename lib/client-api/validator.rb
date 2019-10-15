@@ -7,7 +7,7 @@ module ClientApi
       raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
       raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
-      @resp = res
+      @resp = JSON.parse(res.to_json)
       key = data[:key].split("->")
 
       key.map do |method|
@@ -27,7 +27,7 @@ module ClientApi
         # datatype validation
         if (type == 'boolean') || (type == 'bool') && value.nil?
           expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-        else
+        elsif (type != nil) && (value != nil)
           expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
 
@@ -38,9 +38,22 @@ module ClientApi
         # datatype validation
         if (type == 'boolean') || (type == 'bool') && value.nil?
           expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-        else
+        elsif (type != nil) && (value != nil)
           expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
+
+      when '>', '>=', '<', '<=', 'greater than', 'greater than or equal to', 'less than', 'less than or equal to', 'lesser than', 'lesser than or equal to'
+        message = 'is not greater than (or) equal to' if operator == '>=' || operator == 'greater than or equal to'
+        message = 'is not greater than' if operator == '>' || operator == 'greater than'
+        message = 'is not lesser than' if operator == '<=' || operator == 'less than or equal to'
+        message = 'is not lesser than (or) equal to' if operator == '<' || operator == 'less than' || operator == 'lesser than'
+
+        # value validation
+        expect(@resp.to_i.public_send(operator, value)).to eq(true), "[key]: \"#{data[:key]}\"".blue + "\n  #{message} \n[value]: \"#{data[:value]}\"\n" if value != nil
+
+        # datatype validation
+        expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}  if type != nil
+
       else
         raise_error('operator not matching')
       end
@@ -149,7 +162,6 @@ module ClientApi
         end
 
         if @overall.count(true) == value.count
-          return
         else
           expect(value).to eq(@resp)
         end

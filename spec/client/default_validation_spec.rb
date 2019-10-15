@@ -61,4 +61,29 @@ describe 'Default validation' do
     )
   end
 
+  it "greater/lesser than response validator - json tree", :get do
+    actual =
+        {
+            "posts": [
+                {
+                    "id": 3,
+                    "title": "Post 3"
+                }
+            ],
+            "profile": {
+                "name": "typicode"
+            }
+        }
+
+    validate(
+        actual,
+        {
+            "key": "posts->0->id",
+            "operator": "<=",
+            "value": 5,
+            "type": "integer"
+        }
+    )
+  end
+
 end
