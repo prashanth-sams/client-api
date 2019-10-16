@@ -7,6 +7,11 @@ module ClientApi
 
     include ClientApi
 
+    def initialize(scenario)
+      @scenario = scenario
+      $logger.debug("Requested scenario == '#{@scenario.description}'") if $logger
+    end
+
     def get_request(url, options = {})
       connect(url)
       pre_logger(:log_url => uri(url), :log_header => header(options), :log_method => 'GET') if $logger

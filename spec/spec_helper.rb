@@ -26,4 +26,8 @@ ClientApi.configure do |config|
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
+
+  config.before(:each) do |scenario|
+    ClientApi::Request.new(scenario)
+  end
 end

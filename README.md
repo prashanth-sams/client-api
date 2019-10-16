@@ -45,12 +45,18 @@ require 'client-api'
 Add this config snippet in the `spec_helper.rb` file:
 ```ruby
 ClientApi.configure do |config|
+  # all these configs are optional; comment out the config if not required
   config.base_url = 'https://reqres.in'
   config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
+  
+  # add this snippet only if the logger is enabled
+  config.before(:each) do |scenario|
+    ClientApi::Request.new(scenario)
+  end
 end
 ```
 Create `client-api` object with custom variable
@@ -354,10 +360,14 @@ validate_json( api.body,
 ClientApi.configure do |config|
   ...
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
+  
+  config.before(:each) do |scenario|
+    ClientApi::Request.new(scenario)
+  end
 end
 ``` 
 
-<img src="https://i.imgur.com/5yf1G3N.png" height="120" width="500">
+<img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api

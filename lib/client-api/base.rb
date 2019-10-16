@@ -12,27 +12,32 @@ module ClientApi
 
     def get(url, headers = nil)
       @output = get_request(url, :headers => headers)
-      post_logger if $logger
+      self.post_logger if $logger
+      self.output_json_body if json_output
     end
 
     def post(url, body, headers = nil)
       @output = post_request(url, :body => body, :headers => headers)
-      post_logger if $logger
+      self.post_logger if $logger
+      self.output_json_body if json_output
     end
 
     def delete(url, headers = nil)
       @output = delete_request(url, :headers => headers)
-      post_logger if $logger
+      self.post_logger if $logger
+      self.output_json_body if json_output
     end
 
     def put(url, body, headers = nil)
       @output = put_request(url, :body => body, :headers => headers)
-      post_logger if $logger
+      self.post_logger if $logger
+      self.output_json_body if json_output
     end
 
     def patch(url, body, headers = nil)
       @output = patch_request(url, :body => body, :headers => headers)
-      post_logger if $logger
+      self.post_logger if $logger
+      self.output_json_body if json_output
     end
 
     def status
@@ -40,6 +45,12 @@ module ClientApi
     end
 
     def body
+      unless @output.body == "" || @output.body.nil? || @output.body == "{}"
+        JSON.parse(@output.body)
+      end
+    end
+
+    def output_json_body
       unless @output.body == "" || @output.body.nil? || @output.body == "{}"
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
@@ -50,7 +61,6 @@ module ClientApi
             raise("\n"+" Not a compatible (or) Invalid JSON response  => [kindly check the uri & request details]".brown + " \n\n #{e.message}")
           end
         end
-        JSON.parse(@output.body)
       end
     end
 
