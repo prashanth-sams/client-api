@@ -41,7 +41,7 @@ Import the library in your env file
 require 'client-api'
 ```
 
-## Usage
+## #Usage outline
 
 Add this config snippet in the `spec_helper.rb` file:
 ```ruby
@@ -96,6 +96,121 @@ it "PATCH request" do
   expect(api.status).to eq(200)
 end
 ```
+
+## Validation shortcuts
+
+<table>
+<tr>
+<th>
+Type
+</th>
+<th>
+Query Syntax
+</th>
+<th>
+Query Syntax (Model 2)
+</th>
+<th>
+Query Syntax (Model 3)
+</th>
+</tr>
+<tr>
+<td>
+<br/><br/><br/>Default validation<br/><br/>[key features]<br/><br/> - datatype validation<br/> - key-pair value validation<br/> - single key-pair validation<br/> - multi key-pair validation<br/><br/><br/><br/><br/><br/>
+</td>
+
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                value: '', 
+                operator: '', 
+                type: ''
+            }
+        )
+</pre>
+</td>
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                value: '', 
+                operator: '', 
+            }
+        )
+</pre>
+</td>
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                operator: '', 
+                type: ''
+            },
+            {
+                key: '', 
+                operator: '', 
+                value: ''
+            }
+        )
+</pre>
+</td>
+</tr>
+
+<tr>
+<br/>JSON response/structure validation<br/>
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                value: '', 
+                operator: '', 
+                type: ''
+            }
+        )
+</pre>
+</td>
+
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                value: '', 
+                operator: '', 
+                type: ''
+            }
+        )
+</pre>
+</td>
+<td>
+<pre>
+        validate(
+            api.body,
+            {
+                key: '', 
+                value: '', 
+                operator: '', 
+                type: ''
+            }
+        )
+</pre>
+</td>
+<td>
+</tr>
+
+</table>
+
+## #General usage
 
 > Using `json` template as body
 ```ruby
@@ -154,7 +269,8 @@ end
 ### validation
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
-validate( api.body,
+validate(
+    api.body,
     {
         "key": "name",
         "value": "prashanth sams",
@@ -165,7 +281,8 @@ validate( api.body,
 ``` 
 > Multi key-pair values response validator
 ```ruby
-validate( api.body,
+validate(
+    api.body,
     {
         "key": "name",
         "value": "prashanth sams",
