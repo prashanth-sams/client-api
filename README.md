@@ -108,7 +108,7 @@ Type
 Query Syntax
 </th>
 <th>
-Query Syntax (Model 2) ...
+Query Syntax (Model 2)
 </th>
 <th>
 Query Syntax (Model 3)
@@ -164,7 +164,9 @@ validate(
 </tr>
 
 <tr>
-<br/>JSON response/structure validation<br/>
+<td>
+</b><br/>JSON response content validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
+</td>
 <td>
 <pre>
 validate(
@@ -178,7 +180,59 @@ validate(
 )
 </pre>
 </td>
+<td>
+<pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+        type: ''
+    }
+)
+</pre>
+</td>
+<td>
+</tr>
 
+<tr>
+<td>
+JSON response schema validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
+</td>
+<td>
+<pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+        type: ''
+    }
+)
+</pre>
+</td>
+<td>
+<pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+        type: ''
+    }
+)
+</pre>
+</td>
+<td>
+</tr>
+
+<tr>
+<td>
+JSON response headers validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
+</td>
 <td>
 <pre>
 validate(
