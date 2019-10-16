@@ -11,6 +11,7 @@
 - [x] Multi key-pair response validation
 - [x] JSON schema validation
 - [x] JSON structure validation
+- [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
 - [x] Logs support for debug
@@ -349,6 +350,23 @@ validate_json( api.body,
       "profile": {
           "name": "typicode"
       }
+  }
+)
+```
+
+### response headers validation
+```ruby
+validate_headers(
+  api.response_headers,
+  {
+    key: "connection",
+    operator: "!=",
+    value: "open"
+  },
+  {
+    key: "vary",
+    operator: "==",
+    value: "Origin, Accept-Encoding"
   }
 )
 ```
