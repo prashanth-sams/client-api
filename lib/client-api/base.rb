@@ -64,6 +64,11 @@ module ClientApi
       end
     end
 
+    def response_headers
+      resp_headers = {}
+      @output.response.each { |key, value|  resp_headers.merge!(key.to_s => value.to_s) }
+    end
+
     def message
       @output.message
     end
@@ -73,6 +78,10 @@ module ClientApi
 
       $logger.debug("Response code == #{@output.code.to_i}")
       $logger.debug("Response body == #{res_body}")
+
+      log_headers = {}
+      @output.response.each { |key, value|  log_headers.merge!(key.to_s => value.to_s) }
+      $logger.debug("Response headers == #{log_headers}")
       $logger.debug("=====================================================================================")
     end
 

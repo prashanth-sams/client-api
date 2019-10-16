@@ -4,8 +4,9 @@ module ClientApi
 
   def validate(res, *options)
     options.map do |data|
-      raise_error('key (or) operator is not given!') if data[:key].nil? && data[:operator].nil?
-      raise_error('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
+      raise('key is not given!') if data[:key].nil?
+      raise('operator is not given!') if data[:operator].nil?
+      raise('value (or) type is not given!') if data[:value].nil? && data[:type].nil?
 
       @resp = JSON.parse(res.to_json)
       key = data[:key].split("->")
@@ -55,7 +56,7 @@ module ClientApi
         expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}  if type != nil
 
       else
-        raise_error('operator not matching')
+        raise('operator not matching')
       end
     end
   end
@@ -63,6 +64,31 @@ module ClientApi
   def validate_schema(param1, param2)
     expected_schema = JSON::Validator.validate(param1, param2)
     expect(expected_schema).to eq(true)
+  end
+
+  def validate_headers(res, *options)
+    options.map do |data|
+      raise('key is not given!') if data[:key].nil?
+      raise('operator is not given!') if data[:operator].nil?
+      raise('value is not given!') if data[:value].nil?
+
+      @resp_header = JSON.parse(res.to_json)
+
+      key = data[:key]
+      value = data[:value]
+      operator = data[:operator]
+
+      case operator
+      when '=', '==', 'eql?', 'equal', 'equal?'
+        expect(value).to eq(@resp_header[key][0]), lambda {"\"#{key}\" => \"#{value}\"".blue + "\n  didn't match \n\"#{key}\" => \"#{@resp_header[key][0]}\"\n"}
+
+      when '!', '!=', '!eql?', 'not equal', '!equal?'
+        expect(value).not_to eq(@resp_header[key][0]), lambda {"\"#{key}\" => \"#{value}\"".blue + "\n  shouldn't match \n\"#{key}\" => \"#{@resp_header[key][0]}\"\n"}
+
+      else
+        raise('operator not matching')
+      end
+    end
   end
 
   def datatype(type, value)
