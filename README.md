@@ -101,61 +101,65 @@ end
 
 #### Default validation
 
-[key features]:<br/> - datatype validation<br/> - key-pair value validation<br/> - single key-pair validation<br/> - multi key-pair validation<br/>
+> key features
+- datatype validation
+- key-pair value validation
+- single key-pair validation
+- multi key-pair validation
 
 <table>
     <tr>
         <th>
-            Query Syntax
+            Syntax
         </th>
         <th>
-            Query Syntax (Model 2)
+            Syntax | Model 2
         </th>
         <th>
-            Query Syntax (Model 3)
+            Syntax | Model 3
         </th>
     </tr>
     <tr>
         <td>
             <pre>
-            validate(
-                api.body,
-                {
-                    key: '', 
-                    value: '', 
-                    operator: '', 
-                    type: ''
-                }
-            )
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+        type: ''
+    }
+)
             </pre>
         </td>
         <td>
             <pre>
-            validate(
-                api.body,
-                {
-                    key: '', 
-                    value: '', 
-                    operator: '', 
-                }
-            )
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+    }
+)
             </pre>
         </td>
         <td>
             <pre>
-            validate(
-                api.body,
-                {
-                    key: '', 
-                    operator: '', 
-                    type: ''
-                },
-                {
-                    key: '', 
-                    operator: '', 
-                    value: ''
-                }
-            )
+validate(
+    api.body,
+    {
+        key: '', 
+        operator: '', 
+        type: ''
+    },
+    {
+        key: '', 
+        operator: '', 
+        value: ''
+    }
+)
             </pre>
         </td>
     </tr>
