@@ -384,6 +384,23 @@ validate(
         "key": "profile->name->id",
         "operator": ">=",
         "value": 2,
+    },
+    {
+        "key": "post1->0->name",
+        "operator": "contains",
+        "value": "Sams"
+    },
+    {
+        "key": "post2->0->id",
+        "operator": "include",
+        "value": 34,
+        "type": 'integer'
+    },
+    {
+        "key": "post1->0->available",
+        "value": true,
+        "operator": "not contains",
+        "type": "boolean"
     }
 )
 ```
@@ -396,6 +413,8 @@ validate(
 | Not Equal | `!`, `!=`, `!eql?`, `not equal`, `!equal?`         |
 | Greater than | `>`, `>=`, `greater than`, `greater than or equal to`         |
 | Less than | `<`, `<=`, `less than`, `less than or equal to`, `lesser than`, `lesser than or equal to`         |
+| Contains | `contains`, `has`, `contains?`, `has?`, `include`, `include?`         |
+| Not Contains | `not contains`, `!contains`, `not include`, `!include`         |
 
 ###### Datatype
 | Type  |  options |
