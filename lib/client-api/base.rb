@@ -1,5 +1,4 @@
 require_relative 'request'
-require 'byebug'
 
 module ClientApi
 
