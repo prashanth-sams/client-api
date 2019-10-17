@@ -179,9 +179,6 @@ validate(
         <th>
             Syntax | Model 2
         </th>
-        <th>
-            Syntax | Model 3
-        </th>
     </tr>
     <tr>
         <td>
@@ -221,105 +218,53 @@ validate_json(
 )
             </pre>
         </td>
+    </tr>
+</table>
+
+#### JSON response headers validation
+
+> Uses
+- validates any response headers
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+    </tr>
+    <tr>
         <td>
             <pre>
-validate(
-    api.body,
+validate_headers(
+    api.response_headers,
     {
-        key: '', 
-        operator: '', 
-        type: ''
-    },
+       key: "",
+       operator: "",
+       value: ""
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate_headers(
+    api.response_headers,
     {
-        key: '', 
-        operator: '', 
-        value: ''
+       key: "connection",
+       operator: "!=",
+       value: "open"
+    },{
+       key: "vary",
+       operator: "==",
+       value: "Origin, Accept-Encoding"
     }
 )
             </pre>
         </td>
     </tr>
-</table>
-
-
-
-<tr>
-<td>
-JSON response schema validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
-</td>
-<td>
-<pre>
-validate_json(
-    {
-        "data":
-            {
-                "id": 2,
-                "first_name": "Prashanth",
-                "last_name": "Sams",
-            }
-    },
-    {
-        "data":
-            {
-                "id": 2,
-                "first_name": "Prashanth",
-                "last_name": "Sams",
-            }
-    }
-)
-</pre>
-</td>
-<td>
-<pre>
-validate_json(
-    api.body,
-    {
-        "data":
-            {
-                "id": 2,
-                "first_name": "Prashanth",
-                "last_name": "Sams",
-            }
-    }
-)
-</pre>
-</td>
-<td>
-</tr>
-
-<tr>
-<td>
-JSON response headers validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
-</td>
-<td>
-<pre>
-validate(
-    api.body,
-    {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
-    }
-)
-</pre>
-</td>
-<td>
-<pre>
-validate(
-    api.body,
-    {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
-    }
-)
-</pre>
-</td>
-<td>
-</tr>
-
 </table>
 
 ## #General usage
