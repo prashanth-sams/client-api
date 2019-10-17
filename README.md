@@ -9,8 +9,8 @@
 - [x] Datatype and key-pair value validation
 - [x] Single key-pair response validation
 - [x] Multi key-pair response validation
-- [x] JSON schema validation
-- [x] JSON structure validation
+- [x] JSON response schema validation
+- [x] JSON response content validation
 - [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
@@ -41,7 +41,7 @@ Import the library in your env file
 require 'client-api'
 ```
 
-## Usage
+## #Usage outline
 
 Add this config snippet in the `spec_helper.rb` file:
 ```ruby
@@ -97,15 +97,186 @@ it "PATCH request" do
 end
 ```
 
-> Using `json` template as body
+## Validation shortcuts
+
+#### Default validation
+
+> key features
+- datatype validation
+- key-pair value validation
+- single key-pair validation
+- multi key-pair validation
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+        <th>
+            Syntax | Model 3
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+        type: ''
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        value: '', 
+        operator: '', 
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        operator: '', 
+        type: ''
+    },
+    {
+        key: '', 
+        operator: '', 
+        value: ''
+    }
+)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+#### JSON response content validation
+
+> Uses
+- the most recommended validation for fixed / static JSON responses
+- validates each JSON content value
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+validate_json(
+    {
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
+    },
+    {
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate_json(
+    api.body,
+    {
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
+    }
+)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+#### JSON response headers validation
+
+> Uses
+- validates any response headers
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+validate_headers(
+    api.response_headers,
+    {
+       key: '',
+       operator: '',
+       value: ''
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate_headers(
+    api.response_headers,
+    {
+       key: "connection",
+       operator: "!=",
+       value: "open"
+    },{
+       key: "vary",
+       operator: "==",
+       value: "Origin, Accept-Encoding"
+    }
+)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+## #General usage
+
+Using `json` template as body
 ```ruby
 it "JSON template as body" do
   api.post('/api/users', payload("./data/request/post.json"))
   expect(api.status).to eq(201)
 end
 ```
-
-> Add custom header
+Add custom header
 ```ruby
 it "GET request with custom header" do
   api.get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
@@ -117,44 +288,57 @@ it "PATCH request with custom header" do
   expect(api.status).to eq(200)
 end
 ```
-> Full url support
+Full url support
 ```ruby
 it "full url", :post do
   api.post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
   expect(api.status).to eq(403)
 end
 ```
-> Basic Authentication 
-
+Basic Authentication 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
 end
 ```
-> Custom Timeout in secs 
-
+Custom Timeout in secs 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.time_out = 10 # in secs
 end
 ```
-> Output as `json` template 
-
+Output as `json` template 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.json_output = {'Dirname' => './output', 'Filename' => 'sample'}
 end
 ```
-
 <img src="https://i.imgur.com/tQ46LgF.png" height="230" width="750">
 
-### validation
+## Logs
+> Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
+
+```ruby
+ClientApi.configure do |config|
+  ...
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
+  
+  config.before(:each) do |scenario|
+    ClientApi::Request.new(scenario)
+  end
+end
+``` 
+
+<img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
+
+## #Validation | more info.
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
-validate( api.body,
+validate(
+    api.body,
     {
         "key": "name",
         "value": "prashanth sams",
@@ -165,7 +349,8 @@ validate( api.body,
 ``` 
 > Multi key-pair values response validator
 ```ruby
-validate( api.body,
+validate(
+    api.body,
     {
         "key": "name",
         "value": "prashanth sams",
@@ -230,7 +415,7 @@ validate( api.body,
 | Trueclass | `trueclass`, `true`         |
 | Bignum | `bignum`         |
 
-### json schema validation
+#### JSON response schema validation
 ```ruby
 validate_schema(
   schema_from_json('./data/schema/get_user_schema.json'),
@@ -298,8 +483,8 @@ validate_schema(
 )
 ```
 
-### json structure validation
-> json response structure value validation
+#### JSON response content validation
+> json response content value validation as a structure
 ```ruby
 actual_body = {
     "posts":
@@ -354,7 +539,7 @@ validate_json( api.body,
 )
 ```
 
-### response headers validation
+#### Response headers validation
 ```ruby
 validate_headers(
   api.response_headers,
@@ -370,22 +555,6 @@ validate_headers(
   }
 )
 ```
-
-### logs
-> Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
-
-```ruby
-ClientApi.configure do |config|
-  ...
-  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
-  
-  config.before(:each) do |scenario|
-    ClientApi::Request.new(scenario)
-  end
-end
-``` 
-
-<img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
