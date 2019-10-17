@@ -45,13 +45,13 @@ module ClientApi
     end
 
     def body
-      unless @output.body == "" || @output.body.nil? || @output.body == "{}"
+      unless ['', nil, '{}'].any? { |e| e == @output.body } || pdf_response_header
         JSON.parse(@output.body)
       end
     end
 
     def output_json_body
-      unless @output.body == "" || @output.body.nil? || @output.body == "{}"
+      unless ['', nil, '{}'].any? { |e| e == @output.body } || pdf_response_header
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
           time_now = (Time.now.to_f).to_s.gsub('.','')
@@ -69,12 +69,21 @@ module ClientApi
       @output.response.each { |key, value|  resp_headers.merge!(key.to_s => value.to_s) }
     end
 
+    def pdf_response_header
+      response_headers.map do |data|
+        if data[0].downcase == 'Content-Type'.downcase && (data[1][0].include? 'application/pdf')
+          return true
+        end
+      end
+      false
+    end
+
     def message
       @output.message
     end
 
     def post_logger
-      (@output.body == "" || @output.body.nil? || @output.body == "{}") ? res_body = 'empty response body' : res_body = body
+      ((['', nil, '{}'].any? { |e| e == @output.body }) || pdf_response_header) ? res_body = 'empty response body' : res_body = body
 
       $logger.debug("Response code == #{@output.code.to_i}")
       $logger.debug("Response body == #{res_body}")

@@ -18,7 +18,7 @@ describe 'Default validation' do
 
   it "multi key-pair response validator", :post do
     api = ClientApi::Api.new
-    api.post('/api/users', schema_from_json("./data/request/post.json"))
+    api.post('/api/users', payload("./data/request/post.json"))
 
     expect(api.status).to eq(201)
     validate(

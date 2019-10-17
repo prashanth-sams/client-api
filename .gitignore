@@ -17,3 +17,4 @@ Gemfile.lock
 output/
 logs/
 *.gem
+**/empty_validation_spec.rb
