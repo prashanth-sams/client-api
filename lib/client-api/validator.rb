@@ -228,7 +228,7 @@ module ClientApi
         value.each do |k, v|
           if v.is_a?(String) then
             if v.empty? then
-              v = nil
+              v = ""
             end
           end
           stack.push [key.dup << k, v]
