@@ -241,9 +241,9 @@ validate_json(
 validate_headers(
     api.response_headers,
     {
-       key: "",
-       operator: "",
-       value: ""
+       key: '',
+       operator: '',
+       value: ''
     }
 )
             </pre>
@@ -318,7 +318,23 @@ end
 ```
 <img src="https://i.imgur.com/tQ46LgF.png" height="230" width="750">
 
-### Validation
+## Logs
+> Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
+
+```ruby
+ClientApi.configure do |config|
+  ...
+  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
+  
+  config.before(:each) do |scenario|
+    ClientApi::Request.new(scenario)
+  end
+end
+``` 
+
+<img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
+
+## #Validation | more info.
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
 validate(
@@ -399,7 +415,7 @@ validate(
 | Trueclass | `trueclass`, `true`         |
 | Bignum | `bignum`         |
 
-### JSON response schema validation
+#### JSON response schema validation
 ```ruby
 validate_schema(
   schema_from_json('./data/schema/get_user_schema.json'),
@@ -467,7 +483,7 @@ validate_schema(
 )
 ```
 
-### JSON response content validation
+#### JSON response content validation
 > json response content value validation as a structure
 ```ruby
 actual_body = {
@@ -523,7 +539,7 @@ validate_json( api.body,
 )
 ```
 
-### Response headers validation
+#### Response headers validation
 ```ruby
 validate_headers(
   api.response_headers,
@@ -539,22 +555,6 @@ validate_headers(
   }
 )
 ```
-
-### Logs
-> Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
-
-```ruby
-ClientApi.configure do |config|
-  ...
-  config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 5}
-  
-  config.before(:each) do |scenario|
-    ClientApi::Request.new(scenario)
-  end
-end
-``` 
-
-<img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
 
 #### Is there a demo available for this gem?
 Yes, you can use this demo as an example, https://github.com/prashanth-sams/client-api
