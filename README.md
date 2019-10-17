@@ -9,8 +9,8 @@
 - [x] Datatype and key-pair value validation
 - [x] Single key-pair response validation
 - [x] Multi key-pair response validation
-- [x] JSON schema validation
-- [x] JSON structure validation
+- [x] JSON response schema validation
+- [x] JSON response content validation
 - [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
@@ -165,30 +165,41 @@ validate(
 
 <tr>
 <td>
-</b><br/>JSON response content validation</b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/></b><br/>
+<br/><br/><br/><b>JSON response content validation</b><br/><br/>[Uses]:<br/> - validates each JSON content value<br/> - use it on fixed/static JSON responses<br/><br/><br/><br/><br/><br/><br/><br/>
 </td>
 <td>
 <pre>
-validate(
-    api.body,
+validate_json(
     {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
+    },
+    {
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
     }
 )
 </pre>
 </td>
 <td>
 <pre>
-validate(
+validate_json(
     api.body,
     {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
     }
 )
 </pre>
@@ -202,26 +213,37 @@ JSON response schema validation</b><br/></b><br/></b><br/></b><br/></b><br/></b>
 </td>
 <td>
 <pre>
-validate(
-    api.body,
+validate_json(
     {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
+    },
+    {
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
     }
 )
 </pre>
 </td>
 <td>
 <pre>
-validate(
+validate_json(
     api.body,
     {
-        key: '', 
-        value: '', 
-        operator: '', 
-        type: ''
+        "data":
+            {
+                "id": 2,
+                "first_name": "Prashanth",
+                "last_name": "Sams",
+            }
     }
 )
 </pre>
@@ -266,15 +288,14 @@ validate(
 
 ## #General usage
 
-> Using `json` template as body
+Using `json` template as body
 ```ruby
 it "JSON template as body" do
   api.post('/api/users', payload("./data/request/post.json"))
   expect(api.status).to eq(201)
 end
 ```
-
-> Add custom header
+Add custom header
 ```ruby
 it "GET request with custom header" do
   api.get('/api/users', {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
@@ -286,41 +307,37 @@ it "PATCH request with custom header" do
   expect(api.status).to eq(200)
 end
 ```
-> Full url support
+Full url support
 ```ruby
 it "full url", :post do
   api.post('https://api.enterprise.apigee.com/v1/organizations/ahamilton-eval',{},{'Authorization' => 'Basic YWhhbWlsdG9uQGFwaWdlZS5jb206bXlwYXNzdzByZAo'})
   expect(api.status).to eq(403)
 end
 ```
-> Basic Authentication 
-
+Basic Authentication 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
 end
 ```
-> Custom Timeout in secs 
-
+Custom Timeout in secs 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.time_out = 10 # in secs
 end
 ```
-> Output as `json` template 
-
+Output as `json` template 
 ```ruby
 ClientApi.configure do |config|
   ...
   config.json_output = {'Dirname' => './output', 'Filename' => 'sample'}
 end
 ```
-
 <img src="https://i.imgur.com/tQ46LgF.png" height="230" width="750">
 
-### validation
+### Validation
 > Validate .json response `values` and `datatype`; validates single key-pair values in the response
 ```ruby
 validate(
@@ -401,7 +418,7 @@ validate(
 | Trueclass | `trueclass`, `true`         |
 | Bignum | `bignum`         |
 
-### json schema validation
+### JSON response schema validation
 ```ruby
 validate_schema(
   schema_from_json('./data/schema/get_user_schema.json'),
@@ -469,8 +486,8 @@ validate_schema(
 )
 ```
 
-### json structure validation
-> json response structure value validation
+### JSON response content validation
+> json response content value validation as a structure
 ```ruby
 actual_body = {
     "posts":
@@ -525,7 +542,7 @@ validate_json( api.body,
 )
 ```
 
-### response headers validation
+### Response headers validation
 ```ruby
 validate_headers(
   api.response_headers,
@@ -542,7 +559,7 @@ validate_headers(
 )
 ```
 
-### logs
+### Logs
 > Logs are optional in this library; you can do so through config in `spec_helper.rb`. The param,`StoreFilesCount` will keep the custom files as logs; you can remove it, if not needed.
 
 ```ruby
