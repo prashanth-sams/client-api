@@ -1,4 +1,5 @@
 require_relative 'request'
+require 'byebug'
 
 module ClientApi
 
@@ -45,13 +46,13 @@ module ClientApi
     end
 
     def body
-      unless @output.body == "" || @output.body.nil? || @output.body == "{}" || pdf_response_header == true
+      unless ['', nil, '{}'].any? { |e| e == @output.body } || pdf_response_header
         JSON.parse(@output.body)
       end
     end
 
     def output_json_body
-      unless @output.body == "" || @output.body.nil? || @output.body == "{}" || pdf_response_header == true
+      unless ['', nil, '{}'].any? { |e| e == @output.body } || pdf_response_header
         unless json_output['Dirname'] == nil
           FileUtils.mkdir_p "#{json_output['Dirname']}"
           time_now = (Time.now.to_f).to_s.gsub('.','')
@@ -83,7 +84,7 @@ module ClientApi
     end
 
     def post_logger
-      (@output.body == "" || @output.body.nil? || @output.body == "{}" || pdf_response_header == true) ? res_body = 'empty response body' : res_body = body
+      ((['', nil, '{}'].any? { |e| e == @output.body }) || pdf_response_header) ? res_body = 'empty response body' : res_body = body
 
       $logger.debug("Response code == #{@output.code.to_i}")
       $logger.debug("Response body == #{res_body}")
