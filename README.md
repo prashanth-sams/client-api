@@ -110,7 +110,7 @@ end
 <table>
     <tr>
         <th>
-            Syntax
+            General Syntax
         </th>
         <th>
             Syntax | Model 2
@@ -165,28 +165,27 @@ validate(
     </tr>
 </table>
 
-<table>
-<tr>
-<th>
-Type
-</th>
-<th>
-Query Syntax
-</th>
-<th>
-Query Syntax (Model 2)
-</th>
-<th>
-Query Syntax (Model 3)
-</th>
-</tr>
+#### JSON response content validation
 
-<tr>
-<td>
-<br/><br/><br/><b>JSON response content validation</b><br/><br/>[Uses]:<br/> - validates each JSON content value<br/> - use it on fixed/static JSON responses<br/><br/><br/><br/><br/><br/><br/><br/>
-</td>
-<td>
-<pre>
+> Uses
+- the most recommended validation for fixed / static JSON responses
+- validates each JSON content value
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+        <th>
+            Syntax | Model 3
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
 validate_json(
     {
         "data":
@@ -205,10 +204,10 @@ validate_json(
             }
     }
 )
-</pre>
-</td>
-<td>
-<pre>
+            </pre>
+        </td>
+        <td>
+            <pre>
 validate_json(
     api.body,
     {
@@ -220,10 +219,29 @@ validate_json(
             }
     }
 )
-</pre>
-</td>
-<td>
-</tr>
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        operator: '', 
+        type: ''
+    },
+    {
+        key: '', 
+        operator: '', 
+        value: ''
+    }
+)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+
 
 <tr>
 <td>
