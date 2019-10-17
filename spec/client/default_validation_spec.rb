@@ -86,4 +86,59 @@ describe 'Default validation' do
     )
   end
 
+  it "not contains/contains response validator - json tree", :get do
+    actual =
+        {
+            "post1": [
+                {
+                    "name": "Prashanth Sams",
+                    "title": "Post 1",
+                    "available": true
+                }
+            ],
+            "post2": [
+                {
+                    "id": 434,
+                    "title": "Post 2"
+                }
+            ]
+        }
+
+    validate(
+        actual,
+        {
+            "key": "post1->0->name",
+            "operator": "contains",
+            "value": "Sams"
+        },{
+            "key": "post1->0->name",
+            "operator": "include",
+            "value": "Sams"
+        },
+        {
+            "key": "post2->0->id",
+            "operator": "contains",
+            "value": 34,
+            "type": 'integer'
+        },
+        {
+            "key": "post1->0->name",
+            "operator": "not contains",
+            "value": "Samuel"
+        },
+        {
+            "key": "post2->0->id",
+            "operator": "!include",
+            "value": 33,
+            "type": "string"
+        },
+        {
+            "key": "post1->0->available",
+            "value": true,
+            "operator": "contains",
+            "type": "boolean"
+        }
+    )
+  end
+
 end

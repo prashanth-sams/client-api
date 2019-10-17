@@ -18,7 +18,7 @@ module ClientApi
 
       value ||= data[:value]
       operator = data[:operator]
-      type = data[:type] if data[:type] || data[:type] != {} || !data[:type].empty?
+      type ||= data[:type]
 
       case operator
       when '=', '==', 'eql?', 'equal', 'equal?'
@@ -26,9 +26,9 @@ module ClientApi
         expect(value).to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
 
         # datatype validation
-        if (type == 'boolean') || (type == 'bool') && value.nil?
+        if (type == 'boolean') || (type == 'bool')
           expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-        elsif (type != nil) && (value != nil)
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
           expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
 
@@ -37,9 +37,9 @@ module ClientApi
         expect(value).not_to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
 
         # datatype validation
-        if (type == 'boolean') || (type == 'bool') && value.nil?
+        if (type == 'boolean') || (type == 'bool')
           expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-        elsif (type != nil) && (value != nil)
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
           expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
         end
 
@@ -53,7 +53,29 @@ module ClientApi
         expect(@resp.to_i.public_send(operator, value)).to eq(true), "[key]: \"#{data[:key]}\"".blue + "\n  #{message} \n[value]: \"#{data[:value]}\"\n" if value != nil
 
         # datatype validation
-        expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}  if type != nil
+        expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"} if type != nil
+
+      when 'contains', 'has', 'contains?', 'has?', 'include', 'include?'
+        # value validation
+        expect(@resp.to_s).to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  not contains \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
+
+      when 'not contains', '!contains', 'not include', '!include'
+        # value validation
+        expect(@resp.to_s).not_to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  should not contain \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
 
       else
         raise('operator not matching')
