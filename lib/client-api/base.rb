@@ -46,7 +46,7 @@ module ClientApi
 
     def body
       unless ['', nil, '{}'].any? { |e| e == @output.body } || pdf_response_header
-        JSON.parse(@output.body)
+        JSON.parse(%{#{@output.body}})
       end
     end
 

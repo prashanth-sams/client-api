@@ -167,9 +167,13 @@ validate(
 
 #### JSON response content validation
 
-> Uses
+> key benefits
 - the most recommended validation for fixed / static JSON responses
 - validates each JSON content value
+
+> what to know?
+- replace `null` with `nil` in the expected json (whenever applicable); cos, ruby don't know what is `null`
+
 
 <table>
     <tr>
@@ -213,6 +217,7 @@ validate_json(
                 "id": 2,
                 "first_name": "Prashanth",
                 "last_name": "Sams",
+                "link": nil
             }
     }
 )
@@ -223,7 +228,7 @@ validate_json(
 
 #### JSON response headers validation
 
-> Uses
+> key benefits
 - validates any response headers
 
 <table>
