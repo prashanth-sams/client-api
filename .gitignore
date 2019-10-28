@@ -16,5 +16,7 @@ Gemfile.lock
 .byebug_history
 output/
 logs/
+bin/
+vendor/
 *.gem
 **/empty_validation_spec.rb
