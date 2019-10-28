@@ -13,9 +13,10 @@ module ClientApi
     end
 
     def get_request(url, options = {})
+      body = options[:body] || {}
       connect(url)
-      pre_logger(:log_url => uri(url), :log_header => header(options), :log_method => 'GET') if $logger
-      @http.get(uri(url).request_uri, initheader = header(options))
+      pre_logger(:log_url => uri(url), :log_header => header(options), :log_body => body, :log_method => 'GET') if $logger
+      @http.get(uri(url).request_uri, body.to_json, initheader = header(options))
     end
 
     def post_request(url, options = {})
