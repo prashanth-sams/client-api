@@ -1,5 +1,19 @@
 describe 'Default validation' do
-  # TODO: Add Get Test case with json body
+
+  it "get with json input", :get, :focus do
+    api = ClientApi::Api.new
+    api.get('http://jservice.io/api/categories', body: { "count": 2 })
+
+    expect(api.status).to eq(200)
+    validate(
+        api.body,
+        {
+            "key": "1->id",
+            "operator": "==",
+            "type": 'integer'
+        }
+    )
+  end
 
   it "boolean datatype validator", :get do
     api = ClientApi::Api.new
