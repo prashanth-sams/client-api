@@ -1,6 +1,6 @@
 describe 'Default validation' do
 
-  it "get with json input", :get, :focus do
+  it "get with json input", :get do
     api = ClientApi::Api.new
     api.get('http://jservice.io/api/categories', body: { "count": 2 })
 
