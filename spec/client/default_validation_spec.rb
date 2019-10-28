@@ -1,5 +1,20 @@
 describe 'Default validation' do
 
+  it "get with json input", :get do
+    api = ClientApi::Api.new
+    api.get('http://jservice.io/api/categories', body: { "count": 2 })
+
+    expect(api.status).to eq(200)
+    validate(
+        api.body,
+        {
+            "key": "1->id",
+            "operator": "==",
+            "type": 'integer'
+        }
+    )
+  end
+
   it "boolean datatype validator", :get do
     api = ClientApi::Api.new
     api.get('https://jsonplaceholder.typicode.com/todos/1')
