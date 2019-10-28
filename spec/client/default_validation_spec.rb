@@ -1,4 +1,5 @@
 describe 'Default validation' do
+  # TODO: Add Get Test case with json body
 
   it "boolean datatype validator", :get do
     api = ClientApi::Api.new
