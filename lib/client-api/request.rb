@@ -46,7 +46,11 @@ module ClientApi
     end
 
     def uri(args)
-      %w[http://, https://].any? {|protocol| args.include? protocol} ? URI.parse(args) : URI.parse(base_url + args)
+      if (args.include? "http://") || (args.include? "https://")
+        URI.parse(args)
+      else
+        URI.parse(base_url + args)
+      end
     end
 
     def connect(args)
