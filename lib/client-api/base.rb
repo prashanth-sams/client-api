@@ -10,8 +10,14 @@ module ClientApi
       ((FileUtils.rm Dir.glob("./#{json_output['Dirname']}/*.json"); $roo = true)) if json_output && $roo == nil
     end
 
-    def get(url, headers = nil, body:{})
-      @output = get_request(url, :body => body, :headers => headers)
+    def get(url, headers = nil)
+      @output = get_request(url, :headers => headers)
+      self.post_logger if $logger
+      self.output_json_body if json_output
+    end
+
+    def get_with_body(url, body = nil, headers = nil)
+      @output = get_with_body_request(url, :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
