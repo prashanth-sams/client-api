@@ -95,6 +95,14 @@ it "PATCH request" do
   api.patch('/api/users/2', {"data":{"email":"prashanth@mail.com","first_name":"Prashanth","last_name":"Sams"}})
   expect(api.status).to eq(200)
 end
+
+# For exceptional cases with body in the GET request
+it "GET request with JSON body" do
+  api.get_with_body('/api/users', { "count": 2 })
+  expect(api.status).to eq(200)
+  expect(api.code).to eq(200)
+  expect(api.message).to eq('OK')
+end
 ```
 
 ## Validation shortcuts
