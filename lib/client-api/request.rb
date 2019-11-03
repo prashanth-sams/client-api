@@ -36,6 +36,19 @@ module ClientApi
       @http.post(uri(url).path, body.to_json, initheader = header(options))
     end
 
+    def post_request_x(url, options = {})
+      body = options[:body]
+      connect(url)
+
+      request = Net::HTTP::Post.new(uri(url))
+      body['data'].each { |key,value| request.set_form([[key.to_s,File.open(value)]], body['type'])}
+      final_header =  header(options).delete_if{ |k,| ['Content-Type', 'content-type', 'Content-type', 'content-Type'].include? k }
+      final_header.each { |key,value| request.add_field(key,value)}
+
+      pre_logger(:log_url => uri(url), :log_header => header(options), :log_body => body, :log_method => 'POST') if $logger
+      @http.request(request)
+    end
+
     def delete_request(url, options = {})
       connect(url)
       pre_logger(:log_url => uri(url), :log_header => header(options), :log_method => 'DELETE') if $logger
