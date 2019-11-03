@@ -100,8 +100,20 @@ end
 it "GET request with JSON body" do
   api.get_with_body('/api/users', { "count": 2 })
   expect(api.status).to eq(200)
+end
+
+# For POST request with multi-form as body
+it "POST request with multi-form as body", :get do
+  api.post('/api/upload',
+     payload(
+         'type' => 'multipart/form-data',
+         'data' => {
+             :file => './data/request/upload.png'
+         }
+     )
+  )
+
   expect(api.code).to eq(200)
-  expect(api.message).to eq('OK')
 end
 ```
 

@@ -23,7 +23,16 @@ module ClientApi
     end
 
     def post(url, body, headers = nil)
-      @output = post_request(url, :body => body, :headers => headers)
+      if body.is_a? Hash
+        if body['type'] && body['data']
+          @output = post_request_x(url, :body => body, :headers => headers)
+        else
+          @output = post_request(url, :body => body, :headers => headers)
+        end
+      else
+        raise 'invalid body'
+      end
+
       self.post_logger if $logger
       self.output_json_body if json_output
     end
@@ -104,8 +113,17 @@ module ClientApi
     alias :resp :body
   end
 
-  def payload(path)
-    JSON.parse(File.read(path))
+  def payload(args)
+    if args['type'].nil?
+      JSON.parse(File.read(args))
+    else
+      case args['type']
+      when 'multipart/form-data', 'application/x-www-form-urlencoded'
+        args
+      else
+        raise "invalid body type | try: payload('./data/request/file.png', 'multipart/form-data')"
+      end
+    end
   end
 
   alias :schema_from_json :payload
