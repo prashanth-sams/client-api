@@ -117,7 +117,7 @@ module ClientApi
     if args['type'].nil?
       JSON.parse(File.read(args))
     else
-      case args['type']
+      case args['type'].downcase
       when 'multipart/form-data', 'application/x-www-form-urlencoded'
         args
       else
