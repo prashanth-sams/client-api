@@ -79,7 +79,7 @@ describe 'Size validation' do
 
   end
 
-  it "json response size validator x2", :focus do
+  it "json response size validator x2" do
 
     actual =
         [
