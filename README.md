@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/client-api.svg)](http://badge.fury.io/rb/client-api)
 [![Build Status](https://travis-ci.org/prashanth-sams/client-api.svg?branch=master)](https://travis-ci.org/prashanth-sams/client-api)
-> HTTP Rest Api client for RSpec test automation framework that binds within itself 
+> HTTP REST API client for testing application APIs based on the ruby’s RSpec framework that binds a complete api automation framework setup within itself 
 
 ### Features
 - [x] Custom Header, URL, and Timeout support
@@ -11,6 +11,7 @@
 - [x] Multi key-pair response validation
 - [x] JSON response schema validation
 - [x] JSON response content validation
+- [x] JSON response size validation
 - [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
@@ -103,7 +104,7 @@ it "GET request with JSON body" do
 end
 
 # For POST request with multi-form as body
-it "POST request with multi-form as body", :get do
+it "POST request with multi-form as body" do
   api.post('/api/upload',
      payload(
          'type' => 'multipart/form-data',
@@ -124,6 +125,7 @@ end
 > key features
 - datatype validation
 - key-pair value validation
+- size validation
 - single key-pair validation
 - multi key-pair validation
 
@@ -161,6 +163,7 @@ validate(
         key: '', 
         value: '', 
         operator: '', 
+        size: 2
     }
 )
             </pre>
@@ -434,8 +437,8 @@ validate(
 ###### Operator
 | Type  |  options |
 | ---      | ---         |
-| Equal | `=`, `==`, `eql?`, `equal`, `equal?`         |
-| Not Equal | `!`, `!=`, `!eql?`, `not equal`, `!equal?`         |
+| Equal | `=`, `==`, `eql`, `eql?`, `equal`, `equal?`         |
+| Not Equal | `!`, `!=`, `!eql`, `!eql?`, `not eql`, `not equal`, `!equal?`         |
 | Greater than | `>`, `>=`, `greater than`, `greater than or equal to`         |
 | Less than | `<`, `<=`, `less than`, `less than or equal to`, `lesser than`, `lesser than or equal to`         |
 | Contains | `contains`, `has`, `contains?`, `has?`, `include`, `include?`         |

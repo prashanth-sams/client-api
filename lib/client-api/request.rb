@@ -99,8 +99,13 @@ module ClientApi
     def header(options = {})
       mod_headers = options[:headers] || {}
       authorization = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password'])
-      headers['Authorization'] = basic_encode(:username => basic_auth['Username'], :password => basic_auth['Password']) if authorization != "Basic Og=="
-      headers.merge(mod_headers)
+      if headers == nil || headers == ""
+        @headers = {}
+      else
+        @headers = headers
+      end
+      @headers['Authorization'] = authorization if authorization != "Basic Og=="
+      @headers.merge(mod_headers)
     end
 
     def pre_logger(options = {})
