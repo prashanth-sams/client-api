@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Prashanth Sams"]
   spec.email         = ["sams.prashanth@gmail.com"]
 
-  spec.summary       = "HTTP Rest Api client for RSpec test automation framework that binds within itself"
+  spec.summary       = "HTTP REST API client for testing application APIs based on the ruby’s RSpec framework that binds a complete api automation framework setup within itself"
   spec.homepage      = "https://github.com/prashanth-sams/client-api"
   spec.license       = "MIT"
 
