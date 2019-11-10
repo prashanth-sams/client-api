@@ -19,4 +19,5 @@ logs/
 bin/
 vendor/
 *.gem
-**/empty_validation_spec.rb
+**/demo_validation_spec.rb
+/data/response/post_new.json

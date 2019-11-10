@@ -125,7 +125,8 @@ end
 > key features
 - datatype validation
 - key-pair value validation
-- size validation
+- value size validation
+- is value empty validation
 - single key-pair validation
 - multi key-pair validation
 
@@ -140,6 +141,12 @@ end
         <th>
             Syntax | Model 3
         </th>
+        <th>
+            Syntax | Model 4
+        </th>
+        <th>
+            Syntax | Model 5
+        </th>
     </tr>
     <tr>
         <td>
@@ -147,9 +154,9 @@ end
 validate(
     api.body,
     {
-        key: '', 
-        value: '', 
+        key: '',
         operator: '', 
+        value: '', 
         type: ''
     }
 )
@@ -161,9 +168,33 @@ validate(
     api.body,
     {
         key: '', 
-        value: '', 
+        size: 0
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '', 
+        empty: true
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
+        key: '',
         operator: '', 
-        size: 2
+        value: '', 
+        type: '', 
+        size: 2,
+        empty: true
     }
 )
             </pre>
@@ -432,7 +463,77 @@ validate(
     }
 )
 ```
-<img src="https://i.imgur.com/zQnhMUN.png" height="120" width="400">
+> JSON response size validator
+```ruby
+validate(
+    api.body,
+    {
+        "key": "name",
+        "size": 2
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "Sams",
+        "size": 2
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "Sams",
+        "type": "string",
+        "empty": true,
+        "size": 2
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "size": 2
+    },
+    {
+        "key": "name",
+        "operator": ">=",
+        "size": 2
+    },
+    {
+        "key": "name",
+        "operator": "!=",
+        "size": 2
+    }
+)
+```
+> JSON response value empty? validator
+```ruby
+validate(
+    api.body,
+    {
+        "key": "0->name",
+        "empty": true
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "",
+        "size": 2,
+        "empty": true
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "Sams",
+        "type": "string",
+        "empty": false
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "Sams",
+        "type": "string",
+        "size": 2,
+        "empty": false
+    }
+)
+```
 
 ###### Operator
 | Type  |  options |
