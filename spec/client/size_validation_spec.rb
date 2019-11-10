@@ -102,6 +102,10 @@ describe 'Size validation' do
           "key": "",
           "operator": "==",
           "size": 2
+      },
+      {
+          "key": "1->title",
+          "size": 0
       }
     )
 
