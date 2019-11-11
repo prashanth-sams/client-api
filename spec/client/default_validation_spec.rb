@@ -156,4 +156,82 @@ describe 'Default validation' do
     )
   end
 
+  it "has_key? validator - json tree", :get do
+    actual =
+        {
+            "post1": [
+                {
+                    "name": "Prashanth Sams",
+                    "title": "Post 1",
+                    "available": true
+                }
+            ],
+            "post2": [
+                {
+                    "id": 434,
+                    "title": "Post 2"
+                }
+            ]
+        }
+
+    validate(
+        actual,
+        {
+            "key": "post1",
+            "has_key": true
+        },
+        {
+            "key": "posts1",
+            "has_key": false
+        },
+        {
+            "key": "post1->0",
+            "has_key": true
+        },
+        {
+            "key": "post1->2",
+            "has_key": false
+        },
+        {
+            "key": "post1->1->0->name",
+            "has_key": false
+        },
+        {
+            "key": "post1->1->name",
+            "has_key": false
+        },
+        {
+            "key": "post1->0->name",
+            "operator": "==",
+            "value": "Prashanth Sams",
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "operator": "==",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "operator": "==",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "size": 0,
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "operator": "==",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "size": 0,
+            "empty": false,
+            "has_key": true
+        }
+    )
+  end
+
+
 end
