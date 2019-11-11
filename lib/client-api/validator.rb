@@ -5,22 +5,27 @@ module ClientApi
   def validate(res, *options)
     options.map do |data|
       raise('"key": ""'.green + ' field is missing'.red) if data[:key].nil?
-      raise('"operator":'.green + ' or'.red + ' "size":'.green + ' or'.red + ' "empty":'.green + ' field is not given!'.red) if data[:operator].nil? && data[:size].nil? && data[:empty].nil?
+      raise('"operator":'.green + ' or'.red + ' "size":'.green + ' or'.red + ' "empty":'.green + ' "has_key":'.green + ' field is not given!'.red) if data[:operator].nil? && data[:size].nil? && data[:empty].nil? && data[:has_key].nil?
       raise('"value":'.green + ' or'.red + ' "size":'.green + ' or'.red + ' "type":'.green + ' field is not given!'.red) if data[:value].nil? && data[:type].nil? && data[:size].nil? if data[:operator] != nil
-
-      @resp = JSON.parse(res.to_json)
-      key = data[:key].split("->")
-
-      key.map do |method|
-        method = method.to_i if is_num?(method)
-        @resp = @resp.send(:[], method)
-      end
 
       value ||= data[:value]
       operator ||= data[:operator]
       type ||= data[:type]
       size ||= data[:size]
       empty ||= data[:empty]
+      has_key ||= data[:has_key]
+
+      @resp = JSON.parse(res.to_json)
+      key = data[:key].split("->")
+
+      key.map do |method|
+        method = method.to_i if is_num?(method)
+        begin
+          @resp = @resp.send(:[], method)
+        rescue NoMethodError
+          raise "[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n" if data[:has_key].nil?
+        end
+      end
 
       if operator != nil
         case operator
@@ -40,6 +45,9 @@ module ClientApi
 
           # is empty validation
           validate_empty(empty, data) if empty != nil
+
+          # has key validation
+          validate_key(has_key, data) if has_key != nil
 
         when '!', '!=', '!eql', '!eql?', 'not eql', 'not equal', '!equal?'
           # value validation
@@ -66,6 +74,9 @@ module ClientApi
           # is empty validation
           validate_empty(empty, data) if empty != nil
 
+          # has key validation
+          validate_key(has_key, data) if has_key != nil
+
         when '>', '>=', '<', '<=', 'greater than', 'greater than or equal to', 'less than', 'less than or equal to', 'lesser than', 'lesser than or equal to'
           message = 'is not greater than (or) equal to' if operator == '>=' || operator == 'greater than or equal to'
           message = 'is not greater than' if operator == '>' || operator == 'greater than'
@@ -91,6 +102,9 @@ module ClientApi
 
           # is empty validation
           validate_empty(empty, data) if empty != nil
+
+          # has key validation
+          validate_key(has_key, data) if has_key != nil
 
         when 'contains', 'has', 'contains?', 'has?', 'include', 'include?'
           # value validation
@@ -142,13 +156,17 @@ module ClientApi
           # is empty validation
           validate_empty(empty, data) if empty != nil
 
+          # has key validation
+          validate_key(has_key, data) if has_key != nil
+
         else
           raise('operator not matching')
         end
 
-      elsif ((size != nil) || (empty != nil)) && operator.nil?
+      elsif ((size != nil) || (empty != nil) || (has_key != nil)) && operator.nil?
         validate_empty(empty, data) if empty != nil
         validate_size(size, data) if size != nil
+        validate_key(has_key, data) if has_key != nil
 
       else
         raise('invalid validation fields')
@@ -170,9 +188,29 @@ module ClientApi
   def validate_empty(empty, data)
     case empty
     when true
-      expect(@resp.empty?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is not empty"+"\n"}
+      expect(@resp.nil?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is not empty"+"\n"} if [Integer, TrueClass, FalseClass, Float].include? @resp.class
+      expect(@resp.empty?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is not empty"+"\n"} if [String, Hash, Array].include? @resp.class
     when false
-      expect(@resp.empty?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is empty"+"\n"}
+      expect(@resp.nil?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is empty"+"\n"} if [Integer, TrueClass, FalseClass, Float].include? @resp.class
+      expect(@resp.empty?).to eq(empty), lambda {"[key]: \"#{data[:key]}\"".blue + "\n is empty"+"\n"} if [String, Hash, Array].include? @resp.class
+    end
+  end
+
+  def validate_key(has_key, data)
+    case has_key
+    when true
+      begin
+        expect(@resp.nil?).to eq(false), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"}
+      rescue NoMethodError
+        raise "[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"
+      end
+
+    when false
+      begin
+        expect(@resp.nil?).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does exist"+"\n"}
+      rescue NoMethodError
+        true
+      end
     end
   end
 

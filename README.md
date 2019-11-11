@@ -12,6 +12,8 @@
 - [x] JSON response schema validation
 - [x] JSON response content validation
 - [x] JSON response size validation
+- [x] JSON response is empty? validation
+- [x] JSON response has specific key? validation
 - [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
@@ -127,6 +129,7 @@ end
 - key-pair value validation
 - value size validation
 - is value empty validation
+- key exist or not-exist validation
 - single key-pair validation
 - multi key-pair validation
 
@@ -146,6 +149,9 @@ end
         </th>
         <th>
             Syntax | Model 5
+        </th>
+        <th>
+            Syntax | Model 6
         </th>
     </tr>
     <tr>
@@ -189,12 +195,24 @@ validate(
 validate(
     api.body,
     {
+        key: '', 
+        has_key: true
+    }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate(
+    api.body,
+    {
         key: '',
         operator: '', 
         value: '', 
         type: '', 
         size: 2,
-        empty: true
+        empty: true,
+        has_key: false
     }
 )
             </pre>
@@ -394,7 +412,10 @@ end
 <img src="https://i.imgur.com/6k5lLrD.png" height="165" width="750">
 
 ## #Validation | more info.
-> Validate .json response `values` and `datatype`; validates single key-pair values in the response
+
+> Single key-pair value JSON response validator
+
+Validates JSON response `value`, `datatype`, `size`, `is value empty?`, and `key exist?` 
 ```ruby
 validate(
     api.body,
@@ -407,6 +428,8 @@ validate(
 )
 ``` 
 > Multi key-pair values response validator
+
+Validates more than one key-pair values
 ```ruby
 validate(
     api.body,
@@ -464,6 +487,8 @@ validate(
 )
 ```
 > JSON response size validator
+
+Validates the total size of the JSON array
 ```ruby
 validate(
     api.body,
@@ -475,62 +500,52 @@ validate(
         "key": "name",
         "operator": "==",
         "value": "Sams",
-        "size": 2
-    },
-    {
-        "key": "name",
-        "operator": "==",
-        "value": "Sams",
         "type": "string",
-        "empty": true,
-        "size": 2
-    },
-    {
-        "key": "name",
-        "operator": "==",
-        "size": 2
-    },
-    {
-        "key": "name",
-        "operator": ">=",
-        "size": 2
-    },
-    {
-        "key": "name",
-        "operator": "!=",
+        "has_key": true,
+        "empty": false,
         "size": 2
     }
 )
 ```
 > JSON response value empty? validator
+
+Validates if the key has empty value or not
 ```ruby
 validate(
     api.body,
     {
         "key": "0->name",
-        "empty": true
+        "empty": false
+    },
+    {
+        "key": "name",
+        "operator": "==",
+        "value": "Sams",
+        "type": "string",
+        "size": 2,
+        "has_key": true,
+        "empty": false
+    }
+)
+```
+> JSON response has specific key? validator
+
+Validates if the key exist or not
+```ruby
+validate(
+    api.body,
+    {
+        "key": "0->name",
+        "has_key": true
     },
     {
         "key": "name",
         "operator": "==",
         "value": "",
-        "size": 2,
-        "empty": true
-    },
-    {
-        "key": "name",
-        "operator": "==",
-        "value": "Sams",
-        "type": "string",
-        "empty": false
-    },
-    {
-        "key": "name",
-        "operator": "==",
-        "value": "Sams",
         "type": "string",
         "size": 2,
-        "empty": false
+        "empty": true,
+        "has_key": true
     }
 )
 ```

@@ -12,7 +12,7 @@ describe 'Empty validation' do
             {
                 "id": 11531,
                 "title": "mixed bag",
-                "clues_count": 5
+                "clues_count": 5.0
             }
         ]
 
@@ -51,6 +51,22 @@ describe 'Empty validation' do
           "type": "string",
           "value": "mixed bag",
           "size": 0,
+          "empty": false
+      },
+      {
+          "key": "1",
+          "empty": false
+      },
+      {
+          "key": "1->id",
+          "empty": false
+      },
+      {
+          "key": "",
+          "empty": false
+      },
+      {
+          "key": "1->clues_count",
           "empty": false
       }
     )
