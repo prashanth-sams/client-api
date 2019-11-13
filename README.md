@@ -133,6 +133,10 @@ end
 - single key-pair validation
 - multi key-pair validation
 
+> what to know? 
+- operator field is optional when `"operator": "=="`
+- exception is handled for the invalid key (say, `key: 'post->0->name'`), if the `has_key` field is not added in the validation 
+
 <table>
     <tr>
         <th>
@@ -223,7 +227,6 @@ validate(
     api.body,
     {
         key: '', 
-        operator: '', 
         type: ''
     },
     {
@@ -436,7 +439,6 @@ validate(
     {
         "key": "name",
         "value": "prashanth sams",
-        "operator": "==",
         "type": 'string'
     },
     {
