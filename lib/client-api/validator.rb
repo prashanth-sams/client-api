@@ -3,13 +3,14 @@ require "json-schema"
 module ClientApi
 
   def validate(res, *options)
+
+    # noinspection RubyScope
     options.map do |data|
       raise('"key": ""'.green + ' field is missing'.red) if data[:key].nil?
-      raise('"operator":'.green + ' or'.red + ' "size":'.green + ' or'.red + ' "empty":'.green + ' "has_key":'.green + ' field is not given!'.red) if data[:operator].nil? && data[:size].nil? && data[:empty].nil? && data[:has_key].nil?
-      raise('"value":'.green + ' or'.red + ' "size":'.green + ' or'.red + ' "type":'.green + ' field is not given!'.red) if data[:value].nil? && data[:type].nil? && data[:size].nil? if data[:operator] != nil
+      raise('Need at least one field to validate'.green) if data[:value].nil? && data[:type].nil? && data[:size].nil? && data[:empty].nil? && data[:has_key].nil?
 
       value ||= data[:value]
-      operator ||= data[:operator]
+      operator ||= (data[:operator] || '==').downcase
       type ||= data[:type]
       size ||= data[:size]
       empty ||= data[:empty]
@@ -18,159 +19,162 @@ module ClientApi
       @resp = JSON.parse(res.to_json)
       key = data[:key].split("->")
 
+      @err_method = []
+
       key.map do |method|
         method = method.to_i if is_num?(method)
+        @err_method = @err_method << method
+
         begin
+          if method.is_a? Integer
+            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if ((@resp.class != Array) || (method.to_i >= @resp.count)) && data[:has_key].nil?
+          else
+            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if !@resp.include?(method) && data[:has_key].nil?
+          end
           @resp = @resp.send(:[], method)
         rescue NoMethodError
-          raise "[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n" if data[:has_key].nil?
+          raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if data[:has_key].nil?
         end
       end
 
-      if operator != nil
-        case operator
-        when '=', '==', 'eql', 'eql?', 'equal', 'equal?'
-          # value validation
-          expect(value).to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
-
-          # datatype validation
-          if (type == 'boolean') || (type == 'bool')
-            expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
-            expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          end
-
-          # size validation
-          validate_size(size, data) if size != nil
-
-          # is empty validation
-          validate_empty(empty, data) if empty != nil
-
-          # has key validation
-          validate_key(has_key, data) if has_key != nil
-
-        when '!', '!=', '!eql', '!eql?', 'not eql', 'not equal', '!equal?'
-          # value validation
-          expect(value).not_to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
-
-          # datatype validation
-          if (type == 'boolean') || (type == 'bool')
-            expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
-            expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          end
-
-          # size validation
-          if size != nil
-            begin
-              expect(size).not_to eq(@resp.count), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: #{@resp.count}" + "\n" + "[size not expected]: #{size}".green}
-            rescue NoMethodError
-              expect(size).not_to eq(0), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: 0" + "\n" + "[size not expected]: #{size}".green}
-            rescue ArgumentError
-              expect(size).not_to eq(0), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: 0" + "\n" + "[size not expected]: #{size}".green}
-            end
-          end
-
-          # is empty validation
-          validate_empty(empty, data) if empty != nil
-
-          # has key validation
-          validate_key(has_key, data) if has_key != nil
-
-        when '>', '>=', '<', '<=', 'greater than', 'greater than or equal to', 'less than', 'less than or equal to', 'lesser than', 'lesser than or equal to'
-          message = 'is not greater than (or) equal to' if operator == '>=' || operator == 'greater than or equal to'
-          message = 'is not greater than' if operator == '>' || operator == 'greater than'
-          message = 'is not lesser than (or) equal to' if operator == '<=' || operator == 'less than or equal to'
-          message = 'is not lesser than' if operator == '<' || operator == 'less than' || operator == 'lesser than'
-
-          # value validation
-          expect(@resp.to_i.public_send(operator, value)).to eq(true), "[key]: \"#{data[:key]}\"".blue + "\n  #{message} \n[value]: \"#{data[:value]}\"\n" if value != nil
-
-          # datatype validation
-          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"} if type != nil
-
-          # size validation
-          if size != nil
-            begin
-              expect(@resp.count.to_i.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size to be #{operator} #{size}".green}
-            rescue NoMethodError
-              expect(0.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to be #{operator} #{size}".green}
-            rescue ArgumentError
-              expect(0.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to be #{operator} #{size}".green}
-            end
-          end
-
-          # is empty validation
-          validate_empty(empty, data) if empty != nil
-
-          # has key validation
-          validate_key(has_key, data) if has_key != nil
-
-        when 'contains', 'has', 'contains?', 'has?', 'include', 'include?'
-          # value validation
-          expect(@resp.to_s).to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  not contains \n[value]: \"#{data[:value]}\"\n"} if value != nil
-
-          # datatype validation
-          if (type == 'boolean') || (type == 'bool')
-            expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
-            expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          end
-
-          # size validation
-          if size != nil
-            begin
-              expect(@resp.count.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size to contain: #{size}".green}
-            rescue NoMethodError
-              expect(0.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to contain: #{size}".green}
-            rescue ArgumentError
-              expect(0.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to contain: #{size}".green}
-            end
-          end
-
-          # is empty validation
-          validate_empty(empty, data) if empty != nil
-
-        when 'not contains', '!contains', 'not include', '!include'
-          # value validation
-          expect(@resp.to_s).not_to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  should not contain \n[value]: \"#{data[:value]}\"\n"} if value != nil
-
-          # datatype validation
-          if (type == 'boolean') || (type == 'bool')
-            expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
-            expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
-          end
-
-          # size validation
-          if size != nil
-            begin
-              expect(@resp.count.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size not to contain: #{size}".green}
-            rescue NoMethodError
-              expect(0.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size not to contain: #{size}".green}
-            rescue ArgumentError
-              expect(0.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size not to contain: #{size}".green}
-            end
-          end
-
-          # is empty validation
-          validate_empty(empty, data) if empty != nil
-
-          # has key validation
-          validate_key(has_key, data) if has_key != nil
-
-        else
-          raise('operator not matching')
-        end
-
-      elsif ((size != nil) || (empty != nil) || (has_key != nil)) && operator.nil?
-        validate_empty(empty, data) if empty != nil
-        validate_size(size, data) if size != nil
+      case operator
+      when '=', '==', 'eql', 'eql?', 'equal', 'equal?'
+        # has key validation
         validate_key(has_key, data) if has_key != nil
 
+        # value validation
+        expect(value).to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
+
+        # size validation
+        validate_size(size, data) if size != nil
+
+        # is empty validation
+        validate_empty(empty, data) if empty != nil
+
+      when '!', '!=', '!eql', '!eql?', 'not eql', 'not equal', '!equal?'
+        # has key validation
+        validate_key(has_key, data) if has_key != nil
+
+        # value validation
+        expect(value).not_to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
+
+        # size validation
+        if size != nil
+          begin
+            expect(size).not_to eq(@resp.count), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: #{@resp.count}" + "\n" + "[size not expected]: #{size}".green}
+          rescue NoMethodError
+            expect(size).not_to eq(0), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: 0" + "\n" + "[size not expected]: #{size}".green}
+          rescue ArgumentError
+            expect(size).not_to eq(0), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size shouldn't match" + "\n\n" + "[   actual size   ]: 0" + "\n" + "[size not expected]: #{size}".green}
+          end
+        end
+
+        # is empty validation
+        validate_empty(empty, data) if empty != nil
+
+      when '>', '>=', '<', '<=', 'greater than', 'greater than or equal to', 'less than', 'less than or equal to', 'lesser than', 'lesser than or equal to'
+        message = 'is not greater than (or) equal to' if operator == '>=' || operator == 'greater than or equal to'
+        message = 'is not greater than' if operator == '>' || operator == 'greater than'
+        message = 'is not lesser than (or) equal to' if operator == '<=' || operator == 'less than or equal to'
+        message = 'is not lesser than' if operator == '<' || operator == 'less than' || operator == 'lesser than'
+
+        # has key validation
+        validate_key(has_key, data) if has_key != nil
+
+        # value validation
+        expect(@resp.to_i.public_send(operator, value)).to eq(true), "[key]: \"#{data[:key]}\"".blue + "\n  #{message} \n[value]: \"#{data[:value]}\"\n" if value != nil
+
+        # datatype validation
+        expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"} if type != nil
+
+        # size validation
+        if size != nil
+          begin
+            expect(@resp.count.to_i.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size to be #{operator} #{size}".green}
+          rescue NoMethodError
+            expect(0.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to be #{operator} #{size}".green}
+          rescue ArgumentError
+            expect(0.public_send(operator, size)).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "#{message} #{size}" + "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to be #{operator} #{size}".green}
+          end
+        end
+
+        # is empty validation
+        validate_empty(empty, data) if empty != nil
+
+      when 'contains', 'has', 'contains?', 'has?', 'include', 'include?'
+        # has key validation
+        validate_key(has_key, data) if has_key != nil
+
+        # value validation
+        expect(@resp.to_s).to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  not contains \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
+
+        # size validation
+        if size != nil
+          begin
+            expect(@resp.count.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size to contain: #{size}".green}
+          rescue NoMethodError
+            expect(0.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to contain: #{size}".green}
+          rescue ArgumentError
+            expect(0.to_s).to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size not contains #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size to contain: #{size}".green}
+          end
+        end
+
+        # is empty validation
+        validate_empty(empty, data) if empty != nil
+
+      when 'not contains', '!contains', 'not include', '!include'
+        # has key validation
+        validate_key(has_key, data) if has_key != nil
+
+        # value validation
+        expect(@resp.to_s).not_to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  should not contain \n[value]: \"#{data[:value]}\"\n"} if value != nil
+
+        # datatype validation
+        if (type == 'boolean') || (type == 'bool')
+          expect(%w[TrueClass, FalseClass].any? {|bool| bool.include? @resp.class.to_s}).not_to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        elsif ((type != 'boolean') || (type != 'bool')) && (type != nil)
+          expect(datatype(type, value)).not_to eq(@resp.class), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  datatype shouldn't be \n[type]: \"#{data[:type]}\"\n"}
+        end
+
+        # size validation
+        if size != nil
+          begin
+            expect(@resp.count.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "expected size not to contain: #{size}".green}
+          rescue NoMethodError
+            expect(0.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size not to contain: #{size}".green}
+          rescue ArgumentError
+            expect(0.to_s).not_to include(size.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n"+ "size should not contain #{size}"+ "\n\n" + "[ actual size ]: 0" + "\n" + "expected size not to contain: #{size}".green}
+          end
+        end
+
+        # is empty validation
+        validate_empty(empty, data) if empty != nil
+
       else
-        raise('invalid validation fields')
+        raise('operator not matching')
       end
+
     end
 
   end

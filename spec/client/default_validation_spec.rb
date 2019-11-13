@@ -76,7 +76,7 @@ describe 'Default validation' do
     )
   end
 
-  it "greater/lesser than response validator - json tree", :get do
+  it "greater/lesser than response validator - json tree" do
     actual =
         {
             "posts": [
@@ -101,7 +101,7 @@ describe 'Default validation' do
     )
   end
 
-  it "not contains/contains response validator - json tree", :get do
+  it "not contains/contains response validator - json tree" do
     actual =
         {
             "post1": [
@@ -156,7 +156,7 @@ describe 'Default validation' do
     )
   end
 
-  it "has_key? validator - json tree", :get do
+  it "has_key? validator - json tree" do
     actual =
         {
             "post1": [
@@ -229,6 +229,81 @@ describe 'Default validation' do
             "size": 0,
             "empty": false,
             "has_key": true
+        }
+    )
+  end
+
+  it "operator == as optional validator - json tree" do
+    actual =
+        {
+            "post1": [
+                {
+                    "name": "Prashanth Sams",
+                    "title": "Post 1",
+                    "available": true
+                }
+            ],
+            "post2": [
+                {
+                    "id": 434,
+                    "title": "Post 2"
+                }
+            ]
+        }
+
+    validate(
+        actual,
+        {
+            "key": "post1->0->name",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "size": 0,
+            "empty": false,
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "type": "string",
+            "size": 0,
+            "empty": false,
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "size": 0,
+            "empty": false,
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "empty": false,
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "has_key": true
+        },
+        {
+            "key": "post1->0->name",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "size": 0,
+            "empty": false
+        },
+        {
+            "key": "post1->0->name",
+            "value": "Prashanth Sams",
+            "type": "string",
+            "size": 0
+        },
+        {
+            "key": "post1->0->name",
+            "value": "Prashanth Sams",
+            "type": "string"
+        },
+        {
+            "key": "post1->0->name",
+            "value": "Prashanth Sams"
         }
     )
   end
