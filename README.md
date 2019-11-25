@@ -14,6 +14,7 @@
 - [x] JSON response size validation
 - [x] JSON response is empty? validation
 - [x] JSON response has specific key? validation
+- [x] JSON response array-list sorting validation (descending, ascending)
 - [x] Response headers validation
 - [x] JSON template as body and schema
 - [x] Support to store JSON responses of each tests for the current run
@@ -111,7 +112,7 @@ it "POST request with multi-form as body" do
      payload(
          'type' => 'multipart/form-data',
          'data' => {
-             :file => './data/request/upload.png'
+             'file': './data/request/upload.png'
          }
      )
   )
@@ -129,7 +130,7 @@ end
 - key-pair value validation
 - value size validation
 - is value empty validation
-- key exist or not-exist validation
+- key exist or key not-exist validation
 - single key-pair validation
 - multi key-pair validation
 
@@ -295,6 +296,48 @@ validate_json(
                 "link": nil
             }
     }
+)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+#### JSON response sorting validation
+
+> key benefits
+- validates an array of response key-pair values with ascending or descending soring algorithm. For more details, check `sort_spec.rb`
+
+<table>
+    <tr>
+        <th>
+            General Syntax
+        </th>
+        <th>
+            Syntax | Model 2
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <pre>
+validate_list(
+  api.body,
+  {
+      "key": "posts",
+      "unit": "id",
+      "sort": "ascending"
+  }
+)
+            </pre>
+        </td>
+        <td>
+            <pre>
+validate_list(
+  api.body,
+  {
+      "key": "posts",
+      "unit": "id",
+      "sort": "descending"
+  }
 )
             </pre>
         </td>

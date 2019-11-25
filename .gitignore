@@ -20,4 +20,6 @@ bin/
 vendor/
 *.gem
 **/demo_validation_spec.rb
+**/custom_url_spec.rb
+**/demo_spec.rb
 /data/response/post_new.json

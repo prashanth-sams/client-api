@@ -179,6 +179,36 @@ module ClientApi
 
   end
 
+  def validate_list(res, *options)
+    options.map do |data|
+
+      raise('"sort": ""'.green + ' field is missing'.red) if data[:sort].nil?
+
+      sort ||= data[:sort]
+      unit ||= data[:unit].split("->")
+
+      @value = []
+      @resp = JSON.parse(res.to_json)
+
+      key = data[:key].split("->")
+
+      key.map do |method|
+        @resp = @resp.send(:[], method)
+      end
+
+      @resp.map do |val|
+        unit.map do |list|
+          val = val.send(:[], list)
+        end
+        @value << val
+      end
+
+      expect(@value).to eq(@value.sort) if sort == 'ascending'
+      expect(@value).to eq(@value.sort.reverse) if sort == 'descending'
+
+    end
+  end
+
   def validate_size(size, data)
     begin
       expect(size).to eq(@resp.count), lambda {"[key]: \"#{data[:key]}\"".blue + "\n" + "size didn't match" + "\n\n" + "[ actual size ]: #{@resp.count}" + "\n" + "[expected size]: #{size}".green}
