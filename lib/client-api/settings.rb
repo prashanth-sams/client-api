@@ -27,7 +27,7 @@ module ClientApi
   end
 
   def time_out
-    ClientApi.configuration.time_out || ''
+    ClientApi.configuration.time_out || 60
   end
 
 end
