@@ -11,13 +11,13 @@ module ClientApi
     end
 
     def get(url, headers = nil)
-      @output = get_request(url, :headers => headers)
+      @output = get_request(url_generator(url), :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def get_with_body(url, body = nil, headers = nil)
-      @output = get_with_body_request(url, :body => body, :headers => headers)
+      @output = get_with_body_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
@@ -25,9 +25,9 @@ module ClientApi
     def post(url, body, headers = nil)
       if body.is_a? Hash
         if body['type'] && body['data']
-          @output = post_request_x(url, :body => body, :headers => headers)
+          @output = post_request_x(url_generator(url), :body => body, :headers => headers)
         else
-          @output = post_request(url, :body => body, :headers => headers)
+          @output = post_request(url_generator(url), :body => body, :headers => headers)
         end
       else
         raise 'invalid body'
@@ -38,19 +38,19 @@ module ClientApi
     end
 
     def delete(url, headers = nil)
-      @output = delete_request(url, :headers => headers)
+      @output = delete_request(url_generator(url), :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def put(url, body, headers = nil)
-      @output = put_request(url, :body => body, :headers => headers)
+      @output = put_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def patch(url, body, headers = nil)
-      @output = patch_request(url, :body => body, :headers => headers)
+      @output = patch_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
@@ -123,6 +123,21 @@ module ClientApi
       else
         raise "invalid body type | try: payload('./data/request/file.png', 'multipart/form-data')"
       end
+    end
+  end
+
+  def url_generator(url)
+    begin
+      if url.count == 2
+        query = url[:url].include?('?') ? [url[:url]] : [url[:url].concat('?')]
+
+        url[:query].map do |val|
+          query <<  val[0].to_s + "=" + val[1].gsub(' ','%20') + "&"
+        end
+        return query.join.delete_suffix('&')
+      end
+    rescue ArgumentError
+      url
     end
   end
 
