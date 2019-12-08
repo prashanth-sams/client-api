@@ -129,6 +129,9 @@ module ClientApi
   def url_generator(url)
     begin
       if url.count == 2
+        raise('":url"'.green + ' field is missing in url'.red) if url[:url].nil?
+        raise('":query"'.green + ' field is missing in url'.red) if url[:query].nil?
+
         query = url[:url].include?('?') ? [url[:url]] : [url[:url].concat('?')]
 
         url[:query].map do |val|
