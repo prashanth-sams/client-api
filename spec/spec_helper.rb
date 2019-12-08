@@ -20,9 +20,9 @@ RSpec.configure do |config|
 end
 
 ClientApi.configure do |config|
-  config.base_url = 'https://staging.propertyfinder.ae/en/api'
-  config.headers = {'Content-Type' => 'application/vnd.api+json', 'Accept' => 'application/vnd.api+json', 'X-Pf-JWT' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzIzNTY1MDQsImV4cCI6MTU3NDk0ODUwNCwiaXNzIjoiYWUiLCJ1c2VySWQiOjMzODk2LCJ0eXBlIjoiTWFuYWdlckFwaSJ9.LWsfFdIMYenGcpePDoRFKMwCMDVGrHeRM1Ut8wTXfWU'}
-  # config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
+  config.base_url = 'https://reqres.in'
+  config.headers = {'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+  config.basic_auth = {'Username' => 'ahamilton@apigee.com', 'Password' => 'myp@ssw0rd'}
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
