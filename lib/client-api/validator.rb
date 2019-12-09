@@ -204,13 +204,27 @@ module ClientApi
         @resp = @resp.send(:[], method)
       end
 
+      @cls = []
       @resp.map do |val|
         unit.map do |list|
           val = val.send(:[], list)
         end
         @value << val
+        begin
+          @cls << (val.scan(/^\d+$/).any? ? Integer : val.class)
+        rescue NoMethodError
+          @cls << val.class
+        end
       end
 
+      @value =
+          if @cls.all? {|e| e == Integer}
+            @value.map(&:to_i)
+          elsif (@cls.all? {|e| e == String}) || (@cls.include? String)
+            @value.map(&:to_s)
+          else
+            @value
+          end
       expect(@value).to eq(@value.sort) if sort == 'ascending'
       expect(@value).to eq(@value.sort.reverse) if sort == 'descending'
 
