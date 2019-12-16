@@ -51,7 +51,7 @@ describe 'Default validation' do
         }
     )
 
-    validate({"key": "id", "operator": "eql?", "type": 'string'})
+    validate(api.body, {"key": "id", "operator": "eql?", "type": 'string'})
   end
 
   it "multi key-pair response validator - json tree", :get do
@@ -229,6 +229,52 @@ describe 'Default validation' do
             "size": 0,
             "empty": false,
             "has_key": true
+        }
+    )
+  end
+
+  it "has_key? validator x2- json tree" do
+    actual = {
+        "posts": [
+            {
+                "0": 1,
+                "title": "Post 1"
+            },{
+                "1": 2,
+                "title": "Post 2"
+            },{
+                "2": 3,
+                "title": "Post 3"
+            },{
+                "3": 4,
+                "title": "Post 4"
+            },{
+                "4": 5,
+                "title": "Post 5"
+            }
+        ],
+        "profile": {
+            "name": "typicode"
+        }
+    }
+
+    validate(
+        actual,
+        {
+            'key': 'profile->name',
+            'has_key': true
+        },
+        {
+            'key': 'profile->nasme',
+            'has_key': false
+        },
+        {
+            'key': 'posts->7',
+            'has_key': false
+        },
+        {
+            'key': 'posts->0',
+            'has_key': true
         }
     )
   end

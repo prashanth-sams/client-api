@@ -6,6 +6,7 @@
 
 ### Features
 - [x] Custom Header, URL, and Timeout support
+- [x] URL query string customization
 - [x] Datatype and key-pair value validation
 - [x] Single key-pair response validation
 - [x] Multi key-pair response validation
@@ -112,6 +113,21 @@ end
 it "GET request with JSON body" do
   api.get_with_body('/api/users', { "count": 2 })
   expect(api.status).to eq(200)
+end
+
+# Customize URL query string as a filter
+it "Custom URL query string" do
+  api.get(
+      {
+          :url => '/location?',
+          :query => {
+              'sort': 'name',
+              'fields[count]': '50',
+              'fields[path_prefix]': '6',
+              'filter[name]': 'Los Angels'
+          }
+      }
+  )
 end
 
 # For POST request with multi-form as body
