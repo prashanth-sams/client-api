@@ -9,6 +9,10 @@ module ClientApi
       raise('"key": ""'.green + ' field is missing'.red) if data[:key].nil?
       raise('Need at least one field to validate'.green) if data[:value].nil? && data[:type].nil? && data[:size].nil? && data[:empty].nil? && data[:has_key].nil?
 
+      data.keys.map do |val|
+        raise "invalid key: " + "#{val}".green unless [:key, :operator, :value, :type, :size, :has_key, :empty].include? val
+      end
+
       value ||= data[:value]
       operator ||= (data[:operator] || '==').downcase
       type ||= data[:type]
@@ -26,21 +30,25 @@ module ClientApi
         @err_method = @err_method << method
 
         begin
-          if method.is_a? Integer
-            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if ((@resp.class != Array) || (method.to_i >= @resp.count)) && data[:has_key].nil?
-          else
-            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if !@resp.include?(method) && data[:has_key].nil?
+          if (method.is_a? Integer) && (has_key != nil)
+            @valid_key = false
+          elsif (!method.is_a? Integer) && (has_key != nil)
+            @valid_key = @resp.has_key? method
+          elsif (method.is_a? Integer) && has_key.nil?
+            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if ((@resp.class != Array) || (method.to_i >= @resp.count))
+          elsif (method.is_a? String) && has_key.nil?
+            raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if !@resp.include?(method)
           end
           @resp = @resp.send(:[], method)
         rescue NoMethodError
-          raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if data[:has_key].nil?
+          raise %[key: ]+ %[#{@err_method.join('->')}].green + %[ does not exist! please check the key once again].red if has_key.nil?
         end
       end
 
       case operator
       when '=', '==', 'eql', 'eql?', 'equal', 'equal?'
         # has key validation
-        validate_key(has_key, data) if has_key != nil
+        validate_key(@valid_key, has_key, data) if has_key != nil
 
         # value validation
         expect(value).to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
@@ -60,7 +68,7 @@ module ClientApi
 
       when '!', '!=', '!eql', '!eql?', 'not eql', 'not equal', '!equal?'
         # has key validation
-        validate_key(has_key, data) if has_key != nil
+        validate_key(@valid_key, has_key, data) if has_key != nil
 
         # value validation
         expect(value).not_to eq(@resp), lambda {"[key]: \"#{data[:key]}\"".blue + "\n  didn't match \n[value]: \"#{data[:value]}\"\n"} if value != nil
@@ -93,7 +101,7 @@ module ClientApi
         message = 'is not lesser than' if operator == '<' || operator == 'less than' || operator == 'lesser than'
 
         # has key validation
-        validate_key(has_key, data) if has_key != nil
+        validate_key(@valid_key, has_key, data) if has_key != nil
 
         # value validation
         expect(@resp.to_i.public_send(operator, value)).to eq(true), "[key]: \"#{data[:key]}\"".blue + "\n  #{message} \n[value]: \"#{data[:value]}\"\n" if value != nil
@@ -117,7 +125,7 @@ module ClientApi
 
       when 'contains', 'has', 'contains?', 'has?', 'include', 'include?'
         # has key validation
-        validate_key(has_key, data) if has_key != nil
+        validate_key(@valid_key, has_key, data) if has_key != nil
 
         # value validation
         expect(@resp.to_s).to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  not contains \n[value]: \"#{data[:value]}\"\n"} if value != nil
@@ -145,7 +153,7 @@ module ClientApi
 
       when 'not contains', '!contains', 'not include', '!include'
         # has key validation
-        validate_key(has_key, data) if has_key != nil
+        validate_key(@valid_key, has_key, data) if has_key != nil
 
         # value validation
         expect(@resp.to_s).not_to include(value.to_s), lambda {"[key]: \"#{data[:key]} => #{@resp}\"".blue + "\n  should not contain \n[value]: \"#{data[:value]}\"\n"} if value != nil
@@ -196,13 +204,27 @@ module ClientApi
         @resp = @resp.send(:[], method)
       end
 
+      @cls = []
       @resp.map do |val|
         unit.map do |list|
           val = val.send(:[], list)
         end
         @value << val
+        begin
+          @cls << (val.scan(/^\d+$/).any? ? Integer : val.class)
+        rescue NoMethodError
+          @cls << val.class
+        end
       end
 
+      @value =
+          if @cls.all? {|e| e == Integer}
+            @value.map(&:to_i)
+          elsif (@cls.all? {|e| e == String}) || (@cls.include? String)
+            @value.map(&:to_s)
+          else
+            @value
+          end
       expect(@value).to eq(@value.sort) if sort == 'ascending'
       expect(@value).to eq(@value.sort.reverse) if sort == 'descending'
 
@@ -230,21 +252,14 @@ module ClientApi
     end
   end
 
-  def validate_key(has_key, data)
-    case has_key
+  def validate_key(valid_key, has_key, data)
+    case valid_key
     when true
-      begin
-        expect(@resp.nil?).to eq(false), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"}
-      rescue NoMethodError
-        raise "[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"
-      end
-
+      expect(valid_key).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"} if has_key == true
+      expect(valid_key).to eq(false), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does exist"+"\n"} if has_key == false
     when false
-      begin
-        expect(@resp.nil?).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does exist"+"\n"}
-      rescue NoMethodError
-        true
-      end
+      expect(@resp.nil?).to eq(false), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does not exist"+"\n"} if has_key == true
+      expect(@resp.nil?).to eq(true), lambda {"[key]: \"#{data[:key]}\"".blue + "\n does exist"+"\n"} if has_key == false
     end
   end
 
