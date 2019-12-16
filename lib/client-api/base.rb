@@ -1,13 +1,9 @@
-require_relative 'request'
-
 module ClientApi
-
-  class Api < ClientApi::Request
-
-    include ClientApi
+  class Api < Request
 
     def initialize
       ((FileUtils.rm Dir.glob("./#{json_output['Dirname']}/*.json"); $roo = true)) if json_output && $roo == nil
+      super
     end
 
     def get(url, headers = nil)

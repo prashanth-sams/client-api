@@ -5,6 +5,7 @@ require "rspec/expectations"
 require "json"
 
 RSpec.configure do |config|
+  include ClientApi
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
 
@@ -26,8 +27,4 @@ ClientApi.configure do |config|
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
-
-  config.before(:each) do |scenario|
-    ClientApi::Request.new(scenario)
-  end
 end
