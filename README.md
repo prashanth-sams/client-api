@@ -45,7 +45,15 @@ Import the library in your env file
 require 'client-api'
 ```
 
-## #Usage outline
+## Usage outline
+
+### Usage with RSpec
+Include library in rspec configuration in the `spec_helper.rb` file:
+```ruby
+RSpec.configure do |config|
+  include ClientApi
+end
+```
 
 Add this config snippet in the `spec_helper.rb` file:
 ```ruby

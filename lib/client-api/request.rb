@@ -4,12 +4,14 @@ require 'openssl'
 module ClientApi
 
   class Request
+    attr_accessor :base_url, :basic_auth, :json_output, :time_out, :headers
 
-    include ClientApi
-
-    def initialize(scenario)
-      @scenario = scenario
-      $logger.debug("Requested scenario == '#{@scenario.description}'") if $logger
+    def initialize(configure = ClientApi.configuration)
+      @base_url = configure.base_url
+      @headers = configure.headers
+      @basic_auth = configure.basic_auth
+      @json_output = configure.json_output
+      @time_out = configure.time_out
     end
 
     def get_request(url, options = {})
