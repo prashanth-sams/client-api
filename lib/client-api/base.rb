@@ -1,4 +1,5 @@
 require_relative 'request'
+require 'byebug'
 
 module ClientApi
 
@@ -11,18 +12,21 @@ module ClientApi
     end
 
     def get(url, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       @output = get_request(url_generator(url), :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def get_with_body(url, body = nil, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       @output = get_with_body_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
-    def post(url, body, headers = nil)
+    def post(url, body = nil, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       if body.is_a? Hash
         if body['type'] && body['data']
           @output = post_request_x(url_generator(url), :body => body, :headers => headers)
@@ -38,18 +42,21 @@ module ClientApi
     end
 
     def delete(url, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       @output = delete_request(url_generator(url), :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def put(url, body, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       @output = put_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
 
     def patch(url, body, headers = nil)
+      headers = url[:headers] unless url.is_a? String
       @output = patch_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
@@ -127,20 +134,25 @@ module ClientApi
   end
 
   def url_generator(url)
-    begin
-      if url.count == 2
-        raise('":url"'.green + ' field is missing in url'.red) if url[:url].nil?
-        raise('":query"'.green + ' field is missing in url'.red) if url[:query].nil?
 
-        query = url[:url].include?('?') ? [url[:url]] : [url[:url].concat('?')]
+    return url if url.is_a? String
 
-        url[:query].map do |val|
-          query <<  val[0].to_s + "=" + val[1].gsub(' ','%20') + "&"
+    # url params
+    query = url[:query] unless url[:query].nil?
+    query = nil if url[:query].nil?
+
+    if url[:url].is_a? String
+      if query.nil?
+        return url[:url]
+      else
+        url = url[:url].include?('?') ? [url[:url]] : [url[:url].concat('?')]
+        query.map do |val|
+          url <<  val[0].to_s + "=" + val[1].to_s.gsub(' ','%20') + "&"
         end
-        return query.join.delete_suffix('&')
+        return url.join.delete_suffix('&')
       end
-    rescue ArgumentError
-      url
+    else
+      raise "give a valid url; say., " + ":url => 'https://reqres.in?'".green
     end
   end
 
