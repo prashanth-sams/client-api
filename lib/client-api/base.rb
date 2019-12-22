@@ -44,7 +44,7 @@ module ClientApi
     end
 
     def delete_with_body(url, body, headers = nil)
-      @output = delete_request(url_generator(url), :body => body, :headers => headers)
+      @output = delete_with_body_request(url_generator(url), :body => body, :headers => headers)
       self.post_logger if $logger
       self.output_json_body if json_output
     end
