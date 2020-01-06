@@ -84,8 +84,15 @@ module ClientApi
       if (args.include? "http://") || (args.include? "https://")
         URI.parse(args)
       else
+        url_validator(args)
         URI.parse(base_url + args)
       end
+    end
+
+    def url_validator(args)
+      raise "Missing a slash '/' next to the base URL: #{base_url}" if (base_url[-1, 1] != '/') && (args[0] != '/')
+      raise "Remove a slash '/' next to the base URL: #{base_url}#{args}" if (base_url[-1, 1] == '/') && (args[0] == '/')
+      raise "Invalid (or) incomplete URL: #{base_url + args}" unless (['https://', 'http://'].any? { |e| (base_url + args).include? e })
     end
 
     def connect(args)
