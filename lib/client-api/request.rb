@@ -55,6 +55,17 @@ module ClientApi
       @http.delete(uri(url).path, initheader = header(options))
     end
 
+    def delete_with_body_request(url, options = {})
+      body = options[:body] || {}
+      connect(url)
+      pre_logger(:log_url => uri(url), :log_header => header(options), :log_body => body, :log_method => 'GET') if $logger
+
+      request = Net::HTTP::Delete.new(uri(url))
+      request.body = body.to_json
+      header(options).each { |key,value| request.add_field(key,value)}
+      @http.request(request)
+    end
+
     def put_request(url, options = {})
       body = options[:body] || {}
       connect(url)
