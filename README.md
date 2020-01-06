@@ -101,9 +101,14 @@ it "PATCH request" do
   expect(api.status).to eq(200)
 end
 
-# For exceptional cases with body in the GET request
+# For exceptional cases with body in the GET/DELETE request
 it "GET request with JSON body" do
   api.get_with_body('/api/users', { "count": 2 })
+  expect(api.status).to eq(200)
+end
+
+it "DELETE request with JSON body" do
+  api.delete_with_body('/api/users', { "count": 2 })
   expect(api.status).to eq(200)
 end
 
