@@ -3,7 +3,7 @@ require "client-api"
 require "rspec"
 require "rspec/expectations"
 require "json"
-require "datadog"
+require "dogapi"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -27,6 +27,20 @@ ClientApi.configure do |config|
   config.json_output = {'Dirname' => './output', 'Filename' => 'test'}
   config.time_out = 10  # in secs
   config.logger = {'Dirname' => './logs', 'Filename' => 'test', 'StoreFilesCount' => 2}
+
+  config.before(:all) do
+    $api_key = ENV['API_KEY']
+    $app_key = ENV['APP_KEY']
+
+    dog = Dogapi::Client.new($api_key, $app_key)
+    # p dog.datadog_host  # prints https://api.datadoghq.com
+
+    # dog.add_tags("my_host", ["tagA", "tagB"])
+    # dog.emit_event(Dogapi::Event.new('Testing done, FTW'), :host => "my_host")
+    # dog.emit_point('some.metric.name', 50.0, :host => "my_host", :device => "my_device")
+    # dog.emit_points('some.metric.name', [[t1, val1], [t2, val2], [t3, val3]], :host => "my_host", :device => "my_device")
+    dog.emit_points('qa.baseline.website.desktop', [['passed', 5], ['failed', 2], ['pending', 0]], :host => dog.datadog_host, :device => "my_device")
+  end
 
   config.before(:each) do |scenario|
     ClientApi::Request.new(scenario)
