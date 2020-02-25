@@ -25,8 +25,12 @@ RSpec.configure do |config|
 
     dog = Dogapi::Client.new($api_key, $app_key)
 
-    # dog.search_hosts()
-    IO.write('export.txt', dog.search_hosts())
+    IO.write('values.txt', $api_key+" | "+$app_key)
+    IO.write('values2.txt', dog.host_totals())
+    IO.write('values3.txt', dog.datadog_host)
+      # dog.search_hosts()
+
+    # IO.write('export.txt', dog.search_hosts())
 
     # dog.service_check('app.is_ok', 'app1', 0, :message => 'Response: 200 OK', :tags => ['env:test'])
     # dog.emit_point('qa.baseline.website.desktop', 10, :host => dog.datadog_host, :device => "automation")
