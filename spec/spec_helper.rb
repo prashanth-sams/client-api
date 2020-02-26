@@ -4,6 +4,7 @@ require "rspec"
 require "rspec/expectations"
 require "json"
 require "dogapi"
+require "byebug"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -19,33 +20,8 @@ RSpec.configure do |config|
   config.filter_run_when_matching :focus
   config.expose_dsl_globally = true
 
-  config.before(:all) do
-    $api_key = ENV['API_KEY']
-    $app_key = ENV['APP_KEY']
-
-    dog = Dogapi::Client.new($api_key, $app_key)
-
-    IO.write('values.txt', $api_key+" | "+$app_key)
-    IO.write('values2.txt', dog.host_totals())
-    IO.write('values3.txt', dog.datadog_host)
-      # dog.search_hosts()
-
-    # IO.write('export.txt', dog.search_hosts())
-
-    # dog.service_check('app.is_ok', 'app1', 0, :message => 'Response: 200 OK', :tags => ['env:test'])
-    # dog.emit_point('qa.baseline.website.desktop', 10, :host => dog.datadog_host, :device => "automation")
-    # dog.emit_points('qa.baseline.website.desktop', [['passed', 5], ['failed', 2], ['pending', 0]])
-
-    # dog = Dogapi::Client.new($api_key, $app_key)
-    # dog.emit_points('qa.baseline.website.desktop', [['passed', 5], ['failed', 2], ['pending', 0]], :host => v, :device => "my_device")
-
-    # p dog.datadog_host  # prints https://api.datadoghq.com
-
-    # dog.add_tags("my_host", ["tagA", "tagB"])
-    # dog.emit_event(Dogapi::Event.new('Testing done, FTW'), :host => "my_host")
-    # dog.emit_point('some.metric.name', 50.0, :host => "my_host", :device => "my_device")
-    # dog.emit_points('some.metric.name', [[t1, val1], [t2, val2], [t3, val3]], :host => "my_host", :device => "my_device")
-  end
+  $data ||= []
+  $passed = $failed = $pending = 0
 end
 
 ClientApi.configure do |config|
@@ -59,4 +35,34 @@ ClientApi.configure do |config|
   config.before(:each) do |scenario|
     ClientApi::Request.new(scenario)
   end
+
+  config.after(:each) do |scenario|
+    if (scenario.exception) && (!scenario.exception.message.include? 'pending')
+      status_id = 0
+    elsif scenario.skipped?
+      status_id = 2
+    elsif scenario.pending?
+      status_id = 2
+    else
+      status_id = 1
+    end
+
+    $data << {'status_id' => status_id, 'scenario' => scenario.description}
+  end
+
+  config.after(:all) do
+    $data.map do |value|
+      $failed += 1 if value['status_id'] == 0
+      $passed += 1 if value['status_id'] == 1
+      $pending += 1 if value['status_id'] == 2
+    end
+
+    dog = Dogapi::Client.new(ENV['API_KEY'], ENV['APP_KEY'])
+    dog.batch_metrics do
+      dog.emit_point('qa.baseline.website.passed',$passed)
+      dog.emit_point('qa.baseline.website.failed', $failed)
+      dog.emit_point('qa.baseline.website.pending', $pending)
+    end
+  end
+
 end
